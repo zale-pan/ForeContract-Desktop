@@ -37,4 +37,16 @@ $env:PYTHONPATH = "$desktop\apps\local"
 
 Close the window with × to hide it. Click the tray icon to reopen. Right-click the tray icon and select **退出 ForeContract** to end the client and its host. To keep using the same workspace, reuse the same profile root and repeat the launch command. The bundled interface is currently Chinese. No model key is needed for this walkthrough. Overlapping cancellation and shutdown remains a known limitation; general live-model plan quality is experimental.
 
+## Recover an interrupted Electron download
+
+If the download stops before extraction, keep the same PowerShell session so `$run` and the installed Python environment remain available. Download `electron-v45.4.1-win32-x64.zip` from the [official Electron v45.4.1 release](https://github.com/electron/electron/releases/tag/v45.4.1) using your browser or another connection. Save the complete archive separately from the partial file. Paste its full path without surrounding quotes when prompted.
+
+```powershell
+$zip = (Get-Item -LiteralPath (Read-Host 'Full path to the complete Electron ZIP')).FullName
+if ((Get-FileHash -LiteralPath $zip -Algorithm SHA256).Hash -ne '2ba6223afa9121f42831fefe92c434334907540165294fc56697449d12e7cfe9') { throw 'Electron SHA-256 mismatch' }
+Expand-Archive -LiteralPath $zip -DestinationPath "$run\electron" -ErrorAction Stop
+```
+
+After extraction, resume the launch block at `$env:FC_DESKTOP_ROOT = ...` and run every remaining line. A checksum error means you must obtain a fresh copy before extracting.
+
 Copyright 2026 Zale Pan · Apache-2.0. [LICENSE](LICENSE) · [Third-party notices / 第三方声明](THIRD_PARTY_NOTICES.md).
