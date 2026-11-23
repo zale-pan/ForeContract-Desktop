@@ -8,7 +8,15 @@ That’s how I want to be able to start a coding session. An addition function i
 
 ForeContract Desktop is a coding assistant for Windows. When a discussion turns into an edit, the workbench shows you which files the model wants to change and how it proposes to verify the fix. Editing requires approval of the write scope and verification plan. The actual local command comes back to you for separate approval. There’s a practical reason for that pause: you might be happy to change one line of arithmetic and still want to see the command that’s about to run on your machine.
 
+![Electron conversation with a read-only answer and pending approval for calc.py](docs/images/conversation-approval.png)
+
+The assistant has read the code and tests. The run is waiting for permission to edit `calc.py`; it has not written the file. Both screenshots use the current Electron client, a synthetic calculator project and a local offline provider.
+
 **One thing I especially want this interface to preserve is work that only partly succeeded.** Suppose the line was fixed, but the test failed because the path was wrong. Open the run’s diff to see whether the minus sign became a plus. Open its command result to see how far the test got. Both facts matter. When you return to the project later, the change and the failure are still attached to that run. Model conversations require an online model configuration. Generated plans still benefit from a human looking at whether the chosen test exercises the change.
+
+![Verification summary and arithmetic fix in the same run’s diff](docs/images/run-diff.png)
+
+Here the minus became a plus in `calc.py` and `junit_1` passed. The command containing the local machine path is masked.
 
 ### Why a separate desktop project?
 
@@ -21,6 +29,16 @@ At the desktop, what matters is being able to talk through a problem and let the
 The workbench currently uses Chinese labels. Closing the window sends it to the notification area and lets the host keep running. Open it from the tray to restore the window, or choose “退出 ForeContract” to quit the client and host. Cancellation cleanup overlapping host shutdown remains a known limitation for local trials.
 
 The source instructions below are for people who want to run or develop the application themselves. They open the offline workbench, where projects, sessions and history can be inspected. The model conversation in the opening example requires online mode.
+
+### Where to start in the source
+
+| What you want to explore | Entry point |
+|---|---|
+| Window, tray and host process | [main.cjs](apps/desktop/main.cjs) manages the window and tray. [host.cjs](apps/desktop/host.cjs) launches the local Python host and manages its lifecycle. |
+| Sessions, approvals and results | [server.py](apps/local/forecontract_app/server.py) exposes the HTTP routes. [service.py](apps/local/forecontract_app/service.py) handles sessions and runs. |
+| Chat bubbles, approval cards and the diff drawer | [index.html](apps/local/forecontract_app/static/index.html) defines the page, [app.js](apps/local/forecontract_app/static/app.js) renders host state, and [style.css](apps/local/forecontract_app/static/style.css) controls layout. |
+
+For a first UI change, follow the “查看 Diff” button to `chooseInspectorTab("diff")` in `app.js`. The source launch below runs the checked-out application. Reopen and refresh the window in the same environment to see your static asset changes.
 
 ## Run from source (contributors)
 

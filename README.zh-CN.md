@@ -8,7 +8,15 @@
 
 ForeContract Desktop 是这样一个 Windows 编程助手。讨论转入实际修改时，工作台会让你看到模型打算动哪些文件，以及准备怎样验证。写入范围和验证计划获批后，它才可以编辑；本机真正要运行的命令还会交给你单独确认。审批的用意很具体：你也许同意改一行加法，却想先看一眼那条要在自己电脑上执行的命令。
 
+![Electron 会话里的只读回答与 calc.py 写入审批](docs/images/conversation-approval.png)
+
+同一会话中，助手读过源码和测试；下方正在等待批准修改 `calc.py`，还没有写盘。两图来自当前 Electron 客户端、合成计算器项目和本地离线 provider。
+
 **我最希望这个界面保留下来的，是一次没有完全成功的工作。** 假如那一行已经改对了，测试却因为路径写错而失败，你可以打开这次运行的 Diff，看减号有没有变成加号，也可以打开命令结果，看测试到底跑到了哪里。这两个事实都值得保留。过一会儿回到项目，原先的修改和失败记录还在同一次运行下面，你不用靠记忆猜它做到哪了。模型对话需要配置在线模型，生成的计划也仍需要人判断，尤其值得看的是它选的测试能否真的覆盖这次修改。
+
+![同一次运行完成后的验证摘要与加法修复 Diff](docs/images/run-diff.png)
+
+这次运行中，`calc.py` 的减号变成了加号，`junit_1` 通过。截图已遮盖含本机绝对路径的命令行。
 
 ### 为什么桌面应用和框架分开放？
 
@@ -21,6 +29,16 @@ ForeContract Desktop 是这样一个 Windows 编程助手。讨论转入实际�
 工作台界面目前是中文。关窗口会收起到通知区域，正在运行的宿主可以继续工作；从托盘打开可以回到窗口。需要完全退出时，右键图标选“退出 ForeContract”。活动任务的取消清理恰好与宿主关停重叠，仍是本地试用的已知限制。
 
 下面的源码说明留给想自己运行或参与开发的人。按此方式打开的是离线工作台，可以浏览项目、会话和历史；开头的模型问答需要另行配置在线模式。
+
+### 从哪段源码看起？
+
+| 想了解或修改什么 | 入口 |
+|---|---|
+| 窗口、托盘和宿主进程 | [main.cjs](apps/desktop/main.cjs) 管窗口与托盘；[host.cjs](apps/desktop/host.cjs) 启动本地 Python 宿主并管理其生命周期。 |
+| 会话、审批与运行结果 | [server.py](apps/local/forecontract_app/server.py) 定义 HTTP 接口，[service.py](apps/local/forecontract_app/service.py) 处理会话和运行。 |
+| 聊天气泡、审批卡与 Diff 抽屉 | [index.html](apps/local/forecontract_app/static/index.html) 定义页面，[app.js](apps/local/forecontract_app/static/app.js) 读取宿主状态并渲染，[style.css](apps/local/forecontract_app/static/style.css) 控制布局。 |
+
+第一次改界面，可以沿着“查看 Diff”按钮跟到 `app.js` 中的 `chooseInspectorTab("diff")`。下面的源码启动命令直接使用检出的桌面应用，改完静态资源后在同一环境重开窗口并刷新即可查看。
 
 ## 从源码启动（贡献者）
 
