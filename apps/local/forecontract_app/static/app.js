@@ -1,3 +1,82 @@
+const DEFAULT_PAGE_NAMES = {
+  chat: "会话",
+  projects: "项目",
+  extensions: "扩展",
+  inbox: "审批收件箱",
+  history: "运行历史",
+  settings: "设置",
+};
+
+let i18nMod = null;
+const LOCALE_STORAGE_KEY = "forecontract_ui_locale";
+
+function t(locale, key, params = {}) {
+  if (i18nMod && typeof i18nMod.t === "function") {
+    return i18nMod.t(locale, key, params);
+  }
+  let out = key;
+  for (const [k, v] of Object.entries(params)) {
+    out = out.replaceAll(`{${k}}`, String(v ?? ""));
+  }
+  return out;
+}
+
+function normalizeLocale(raw) {
+  if (i18nMod && typeof i18nMod.normalizeLocale === "function") {
+    return i18nMod.normalizeLocale(raw);
+  }
+  return typeof raw === "string" && raw.toLowerCase().startsWith("zh") ? "zh-CN" : "en";
+}
+
+function detectBrowserLocale() {
+  if (i18nMod && typeof i18nMod.detectBrowserLocale === "function") {
+    return i18nMod.detectBrowserLocale(LOCALE_STORAGE_KEY);
+  }
+  return "zh-CN";
+}
+
+function applyStaticTranslations(doc, locale) {
+  if (i18nMod && typeof i18nMod.applyStaticTranslations === "function") {
+    i18nMod.applyStaticTranslations(doc, locale);
+  }
+}
+
+function formatApprovalMeaning(locale, kind) {
+  return i18nMod && typeof i18nMod.formatApprovalMeaning === "function"
+    ? i18nMod.formatApprovalMeaning(locale, kind)
+    : "";
+}
+
+function formatProposalKind(locale, kind) {
+  return i18nMod && typeof i18nMod.formatProposalKind === "function"
+    ? i18nMod.formatProposalKind(locale, kind)
+    : String(kind || "");
+}
+
+function formatRunState(locale, rawState) {
+  return i18nMod && typeof i18nMod.formatRunState === "function"
+    ? i18nMod.formatRunState(locale, rawState)
+    : String(rawState || "idle");
+}
+
+function formatVerificationStatus(locale, rawStatus) {
+  return i18nMod && typeof i18nMod.formatVerificationStatus === "function"
+    ? i18nMod.formatVerificationStatus(locale, rawStatus)
+    : String(rawStatus || "not_run");
+}
+
+function getPageNames(locale) {
+  return i18nMod && typeof i18nMod.getPageNames === "function"
+    ? i18nMod.getPageNames(locale)
+    : DEFAULT_PAGE_NAMES;
+}
+
+function getSettingsCatalog(locale) {
+  return i18nMod && typeof i18nMod.getSettingsCatalog === "function"
+    ? i18nMod.getSettingsCatalog(locale)
+    : SETTINGS_CATALOG;
+}
+
 const TOKEN_KEY = "forecontract_access_token";
 const PROJECT_KEY = "forecontract_active_project_id";
 const SESSION_KEY = "forecontract_active_session_id";
@@ -67,6 +146,7 @@ const state = {
   chatCitedRead: null,
   theme: "light",
   density: "normal",
+  locale: "zh-CN",
   historyFilter: "",
   historyNextCursor: null,
   historyHasMore: false,
@@ -276,7 +356,7 @@ function renderIdentityHeader() {
   const kickerEl = el("chat-kicker");
   if (cpEl) cpEl.textContent = state.selectedProjectId || "-";
   if (cpnEl) {
-    cpnEl.textContent = proj ? proj.name : "未选择项目";
+    cpnEl.textContent = proj ? proj.name : t(state.locale, "topbar.noProject");
   }
   if (csEl) csEl.textContent = state.activeSessionId || "-";
   if (sideProjEl) {
@@ -284,10 +364,10 @@ function renderIdentityHeader() {
   }
   if (kickerEl) {
     const sess = getActiveSession();
-    const modelStr = sess && sess.model ? `${sess.model.provider}:${sess.model.model}` : "未绑定模型";
+    const modelStr = sess && sess.model ? `${sess.model.provider}:${sess.model.model}` : "-";
     kickerEl.textContent = proj
       ? `${proj.name} [${proj.kind}] · ${modelStr}`
-      : "未选择项目 · 当前会话";
+      : `${t(state.locale, "topbar.noProject")} · ${t(state.locale, "nav.chatTitle")}`;
   }
 }
 
@@ -320,21 +400,18 @@ function renderScopeSummary() {
 function renderDraftStatus() {
   const statusEl = el("draft-status");
   if (!statusEl) return;
-  let dirtyParts = [];
+  let dirty = false;
   if (state.activeSessionId) {
     const d = getOrCreateSessionDraft(state.activeSessionId);
     const chatDraft = state.chatDrafts.get(state.activeSessionId) || "";
-    if ((d && d.goalDirty) || chatDraft.trim().length > 0) dirtyParts.push("输入");
-    if (d && d.constraintsDirty) dirtyParts.push("固定约束");
+    if ((d && (d.goalDirty || d.constraintsDirty)) || chatDraft.trim().length > 0) {
+      dirty = true;
+    }
   } else if (state.selectedProjectId) {
     const g = state.projectGoalDrafts.get(state.selectedProjectId);
-    if (g && g.goalDirty) dirtyParts.push("输入");
+    if (g && g.goalDirty) dirty = true;
   }
-  if (dirtyParts.length > 0) {
-    statusEl.textContent = `未保存草稿（${dirtyParts.join(" / ")}）：草稿未保存，刷新会丢失`;
-  } else {
-    statusEl.textContent = "草稿已同步（草稿未保存，刷新会丢失）";
-  }
+  statusEl.textContent = t(state.locale, dirty ? "settings.draftDirty" : "settings.draftClean");
 }
 
 function loadDraftsIntoInputs() {
@@ -631,7 +708,7 @@ function renderRunHistorySelect() {
   if (orderedIds.length === 0) {
     const opt = document.createElement("option");
     opt.value = "";
-    opt.textContent = "（尚无运行记录）";
+    opt.textContent = t(state.locale, "chat.noRunsOption");
     sel.appendChild(opt);
     sel.disabled = true;
     if (modeEl) modeEl.textContent = "";
@@ -643,7 +720,9 @@ function renderRunHistorySelect() {
     const opt = document.createElement("option");
     opt.value = rid;
     const isActiveRun = Boolean(sess && sess.active_run_id === rid);
-    opt.textContent = isActiveRun ? `${rid}（当前活动）` : `${rid}（历史只读）`;
+    opt.textContent = isActiveRun
+      ? t(state.locale, "run.historyActiveOption", { id: rid })
+      : t(state.locale, "run.historyReadonlyOption", { id: rid });
     sel.appendChild(opt);
   }
   if (state.activeRunId && seen.has(state.activeRunId)) {
@@ -653,9 +732,9 @@ function renderRunHistorySelect() {
     if (!state.activeRunId) {
       modeEl.textContent = "";
     } else if (isSelectedRunInteractive()) {
-      modeEl.textContent = "当前活动运行";
+      modeEl.textContent = t(state.locale, "run.modeActive");
     } else {
-      modeEl.textContent = "只读查看（历史或已终态，不可提交变更）";
+      modeEl.textContent = t(state.locale, "run.modeReadonly");
     }
   }
 }
@@ -706,10 +785,10 @@ function renderContextAndHistory() {
   }
 
   if (quotaEl) {
-    quotaEl.textContent = `存储用量（SQLite sessions.sqlite3）：已用 ${ctx.storage_used_bytes} 字节；无自动删除或 GC，用户项目数据与临时开发证据分离`;
+    quotaEl.textContent = t(state.locale, "storage.quotaLine", { bytes: ctx.storage_used_bytes });
   }
   const ovStorage = el("settings-overview-storage-bytes");
-  if (ovStorage) { ovStorage.textContent = `${ctx.storage_used_bytes} 字节`; }
+  if (ovStorage) { ovStorage.textContent = t(state.locale, "storage.bytesUnit", { bytes: ctx.storage_used_bytes }); }
 
   const items = state.historyItems || [];
   const activeSess = state.sessions.find((s) => s.session_id === ctx.session_id);
@@ -802,7 +881,9 @@ function renderContextAndHistory() {
     if (visibleGroups.length === 0) {
       const emptyLi = document.createElement("li");
       emptyLi.className = "muted";
-      emptyLi.textContent = filterKey ? "当前已加载历史中没有匹配筛选条件的记录。" : "尚无历史条目。";
+      emptyLi.textContent = filterKey
+        ? t(state.locale, "history.emptyFiltered")
+        : t(state.locale, "history.emptyNone");
       hList.appendChild(emptyLi);
     } else {
       for (const grp of visibleGroups) {
@@ -816,14 +897,14 @@ function renderContextAndHistory() {
         const stateTag = grp.durableState ? ` [${grp.durableState}]` : "";
         const goalTag = grp.goalText ? ` — ${grp.goalText}` : "";
         label.textContent = grp.runId
-          ? `run=${grp.runId}${stateTag}${goalTag} (条目=${grp.items.length})`
-          : `session=${grp.sessionId} (条目=${grp.items.length})`;
+          ? t(state.locale, "history.runLine", { id: grp.runId, state: stateTag, goal: goalTag, count: grp.items.length })
+          : t(state.locale, "history.sessionLine", { id: grp.sessionId, count: grp.items.length });
         header.appendChild(label);
         if (grp.runId) {
           const viewBtn = document.createElement("button");
           viewBtn.type = "button";
           viewBtn.className = "small-btn";
-          viewBtn.textContent = "查看运行";
+          viewBtn.textContent = t(state.locale, "history.viewRun");
           viewBtn.addEventListener("click", () => {
             goToPage("chat");
             void selectRunView(grp.runId);
@@ -1155,14 +1236,14 @@ function renderProposals() {
         trustBox.disabled = isLocked;
         trustBox.setAttribute("data-testid", `proposal-trust-${pid}`);
         const span = document.createElement("span");
-        span.textContent = "确认受信任本机命令执行（非 OS 沙箱，进程可访问本机文件与网络 / trusted_local_execution）";
+        span.textContent = t(state.locale, "proposal.trustedCheck");
         trustLabel.appendChild(trustBox);
         trustLabel.appendChild(span);
         controls.appendChild(trustLabel);
       }
       const approveBtn = document.createElement("button");
       approveBtn.type = "button";
-      approveBtn.textContent = "批准提案";
+      approveBtn.textContent = t(state.locale, "proposal.approve");
       approveBtn.disabled = isLocked;
       approveBtn.setAttribute("data-testid", `proposal-approve-${pid}`);
       approveBtn.addEventListener("click", () => {
@@ -1177,7 +1258,7 @@ function renderProposals() {
 
       const rejectBtn = document.createElement("button");
       rejectBtn.type = "button";
-      rejectBtn.textContent = "拒绝提案";
+      rejectBtn.textContent = t(state.locale, "proposal.reject");
       rejectBtn.disabled = isLocked;
       rejectBtn.setAttribute("data-testid", `proposal-reject-${pid}`);
       rejectBtn.addEventListener("click", () => {
@@ -1201,7 +1282,7 @@ function renderSkillCatalog() {
     ul.replaceChildren();
     const li = document.createElement("li");
     li.className = "muted";
-    li.textContent = "受控示例项目不支持 Skill（请登记已有本机项目以查看 .forecontract/skills）。";
+    li.textContent = t(state.locale, "ext.skillsSampleUnsupported");
     ul.appendChild(li);
     return;
   }
@@ -1210,7 +1291,7 @@ function renderSkillCatalog() {
     ul.replaceChildren();
     const li = document.createElement("li");
     li.className = "muted";
-    li.textContent = "当前项目未发现本地 Skill（.forecontract/skills/<id>/SKILL.md）。";
+    li.textContent = t(state.locale, "ext.skillsEmpty");
     ul.appendChild(li);
     return;
   }
@@ -3359,13 +3440,14 @@ function toggleNavigation() {
 }
 
 function goToPage(pageName) {
-  if (!Object.prototype.hasOwnProperty.call(PAGE_NAMES, pageName)) return;
+  const pageNames = getPageNames(state.locale);
+  if (!Object.prototype.hasOwnProperty.call(pageNames, pageName)) return;
   state.activePage = pageName;
   document.body.classList.toggle("page-settings-active", pageName === "settings");
   const isChat = pageName === "chat";
   const crumb = el("page-crumb");
   if (crumb) {
-    crumb.textContent = PAGE_NAMES[pageName];
+    crumb.textContent = pageNames[pageName];
     crumb.hidden = isChat;
   }
   const heading = el("run-heading");
@@ -3469,14 +3551,14 @@ function renderSettingsSearchResults() {
     emptyEl.hidden = true;
     return;
   }
-  settingsSearchMatches = SETTINGS_CATALOG.filter((item) => {
+  settingsSearchMatches = getSettingsCatalog(state.locale).filter((item) => {
     const hay = `${item.title} ${item.summary} ${item.keywords}`.toLowerCase();
     return hay.includes(q);
   });
   if (settingsSearchMatches.length === 0) {
     settingsSearchIndex = -1;
     listEl.hidden = true;
-    emptyEl.textContent = `未找到与“${rawQuery}”匹配的设置项`;
+    emptyEl.textContent = t(state.locale, "settings.searchEmpty");
     emptyEl.hidden = false;
     return;
   }
@@ -3577,8 +3659,8 @@ function syncInspectorBindingHeader() {
     const modeLabel = !state.activeRunId
       ? "未选择运行"
       : isSelectedRunInteractive()
-        ? "当前活动"
-        : "只读证据";
+        ? t(state.locale, "inspector.badgeCurrent")
+        : t(state.locale, "inspector.readonlyEvidence");
     badgeSpan.textContent = `${modeLabel} · session=${sid} · run=${rid}`;
   }
 }
@@ -3603,7 +3685,10 @@ function setInspectorExpanded(expanded, openerEl = null) {
   if (layout) layout.classList.toggle("inspector-collapsed", !state.inspectorExpanded);
   if (insp) insp.hidden = !state.inspectorExpanded;
   if (btn) {
-    btn.textContent = state.inspectorExpanded ? "收起详情" : "展开详情";
+    btn.textContent = t(
+      state.locale,
+      state.inspectorExpanded ? "topbar.collapseInspector" : "topbar.expandInspector"
+    );
     btn.setAttribute("aria-expanded", String(state.inspectorExpanded));
   }
   syncInspectorBindingHeader();
@@ -3776,22 +3861,25 @@ function renderInbox() {
   if (!ul) return;
   if (sumEl) {
     sumEl.textContent = state.selectedProjectId
-      ? `当前项目 (${state.selectedProjectId}) 活动运行待审批数：${state.inboxItems.length}${state.inboxPartialFailure ? "（计数不完整）" : ""}`
-      : "请先在项目页选择项目。";
+      ? t(state.locale, "inbox.summary", {
+          count: state.inboxItems.length,
+          sessions: state.sessions.filter((s) => s.project_id === state.selectedProjectId).length,
+        })
+      : t(state.locale, "topbar.noProject");
   }
   if (warnEl) {
     warnEl.hidden = !state.inboxPartialFailure;
     warnEl.textContent = state.inboxPartialFailure
-      ? "部分活动运行的提案未能加载成功，当前待办计数与列表不完整。"
+      ? (state.locale === "en"
+          ? "Some active runs failed to load; pending list may be incomplete."
+          : "部分活动运行的提案未能加载成功，当前待办计数与列表不完整。")
       : "";
   }
   ul.replaceChildren();
   if (state.inboxItems.length === 0) {
     const empty = document.createElement("li");
     empty.className = "muted";
-    empty.textContent = state.inboxPartialFailure
-      ? "未能确认零待办（部分活动运行加载失败）。"
-      : "当前项目活动运行没有待处理的提案。";
+    empty.textContent = t(state.locale, "inbox.empty");
     ul.appendChild(empty);
     return;
   }
@@ -3799,10 +3887,10 @@ function renderInbox() {
     const li = document.createElement("li");
     li.setAttribute("data-testid", `inbox-item-${entry.propId}`);
     const title = document.createElement("div");
-    const kindTag = entry.itemType === "extension"
-      ? `[扩展/${entry.raw.kind}]`
-      : `[${entry.raw.kind}]`;
-    title.textContent = `${kindTag} session=${entry.sessionId.slice(0, 8)} run=${entry.runId.slice(0, 8)} — ${entry.raw.summary || entry.propId}`;
+    const kindLabel = entry.itemType === "extension"
+      ? `${formatProposalKind(state.locale, "extension")} (${entry.raw.kind})`
+      : formatProposalKind(state.locale, entry.raw.kind);
+    title.textContent = `[${kindLabel}] session=${entry.sessionId.slice(0, 8)} run=${entry.runId.slice(0, 8)} — ${entry.raw.summary || entry.propId}`;
     li.appendChild(title);
 
     const actions = document.createElement("div");
@@ -3810,7 +3898,7 @@ function renderInbox() {
     const jumpBtn = document.createElement("button");
     jumpBtn.type = "button";
     jumpBtn.className = "small-btn";
-    jumpBtn.textContent = "定位到会话";
+    jumpBtn.textContent = state.locale === "en" ? "Go to Chat" : "定位到会话";
     jumpBtn.addEventListener("click", () => {
       goToPage("chat");
       void switchSession(entry.sessionId).then(() => selectRunView(entry.runId));
@@ -3832,7 +3920,7 @@ function renderInbox() {
     const approveBtn = document.createElement("button");
     approveBtn.type = "button";
     approveBtn.className = "small-btn primary-btn";
-    approveBtn.textContent = "批准";
+    approveBtn.textContent = t(state.locale, "proposal.approve");
     if (trustCb) {
       approveBtn.disabled = true;
       trustCb.addEventListener("change", () => {
@@ -3857,7 +3945,7 @@ function renderInbox() {
     const rejectBtn = document.createElement("button");
     rejectBtn.type = "button";
     rejectBtn.className = "small-btn";
-    rejectBtn.textContent = "拒绝";
+    rejectBtn.textContent = t(state.locale, "inbox.rejectBtn");
     rejectBtn.addEventListener("click", () => {
       approveBtn.disabled = true;
       rejectBtn.disabled = true;
@@ -4265,8 +4353,55 @@ function handleConstraintsInput() {
   renderDraftStatus();
 }
 
+function renderHostHealthSummary() {
+  const modeLabel = el("host-mode-label");
+  if (modeLabel) {
+    if (state.liveEnabled) {
+      modeLabel.textContent = t(state.locale, "host.liveReady", {
+        model: state.liveModel || "deepseek-flash",
+      });
+    } else if (state.testProviderInjected) {
+      modeLabel.textContent = state.locale === "en" ? "Test provider mode" : "测试注入模式";
+    } else {
+      modeLabel.textContent = t(state.locale, "host.offline");
+    }
+  }
+  const healthNote = el("settings-host-health");
+  if (healthNote) {
+    const modeDesc = state.liveEnabled
+      ? (state.locale === "en" ? "Online connected" : "在线已连接")
+      : (state.testProviderInjected
+          ? (state.locale === "en" ? "Test provider mode" : "测试注入模式")
+          : t(state.locale, "host.offline"));
+    const modelDesc = state.liveEnabled
+      ? (state.liveModel || "deepseek-flash")
+      : (state.testProviderInjected ? "stub" : "-");
+    healthNote.textContent = `${t(state.locale, "settings.ovConnState")}: ${modeDesc} · ${t(state.locale, "settings.ovCurModel")}: ${modelDesc}`;
+  }
+  const ovMode = el("settings-overview-host-mode");
+  if (ovMode) {
+    if (state.liveEnabled) {
+      ovMode.textContent = `● ${t(state.locale, "host.liveReady", { model: state.liveModel || "deepseek-flash" })}`;
+    } else if (state.testProviderInjected) {
+      ovMode.textContent = state.locale === "en" ? "● Test stub" : "● 测试注入";
+    } else {
+      ovMode.textContent = `● ${t(state.locale, "host.offline")}`;
+    }
+  }
+  const ovModel = el("settings-overview-model-val");
+  if (ovModel) {
+    if (state.liveEnabled) {
+      ovModel.textContent = state.liveModel || "deepseek-flash";
+    } else if (state.testProviderInjected) {
+      ovModel.textContent = "stub";
+    } else {
+      ovModel.textContent = "-";
+    }
+  }
+  renderLiveNotice();
+}
+
 async function fetchHostHealth() {
-  let modeText = "unconfigured";
   try {
     const resp = await apiFetch("/api/v1/health");
     if (!resp.ok) return;
@@ -4275,53 +4410,12 @@ async function fetchHostHealth() {
     state.liveProvider = typeof health.provider === "string" ? health.provider : "deepseek";
     state.liveModel = typeof health.model === "string" ? health.model : "";
     state.testProviderInjected = Boolean(health.test_provider_injected);
-    modeText = typeof health.mode === "string" ? health.mode : (state.liveEnabled ? "live" : "unconfigured");
   } catch {
     state.liveEnabled = false;
     state.liveModel = "";
     state.testProviderInjected = false;
   }
-  const modeLabel = el("host-mode-label");
-  if (modeLabel) {
-    if (state.liveEnabled) {
-      modeLabel.textContent = `在线模型 · ${state.liveModel || "deepseek-flash"}`;
-    } else if (state.testProviderInjected) {
-      modeLabel.textContent = "测试注入模式";
-    } else {
-      modeLabel.textContent = "未连接在线模型";
-    }
-  }
-  const healthNote = el("settings-host-health");
-  if (healthNote) {
-    const modeDesc = state.liveEnabled
-      ? "在线已连接"
-      : (state.testProviderInjected ? "测试注入模式" : "未连接在线模型");
-    const modelDesc = state.liveEnabled
-      ? (state.liveModel || "deepseek-flash")
-      : (state.testProviderInjected ? "测试替身" : "未配置在线模型");
-    healthNote.textContent = `连接状态：${modeDesc} · 当前模型：${modelDesc}`;
-  }
-  const ovMode = el("settings-overview-host-mode");
-  if (ovMode) {
-    if (state.liveEnabled) {
-      ovMode.textContent = `● 已连接（${state.liveModel || "deepseek-flash"}）`;
-    } else if (state.testProviderInjected) {
-      ovMode.textContent = "● 测试注入";
-    } else {
-      ovMode.textContent = "● 未连接";
-    }
-  }
-  const ovModel = el("settings-overview-model-val");
-  if (ovModel) {
-    if (state.liveEnabled) {
-      ovModel.textContent = state.liveModel || "deepseek-flash";
-    } else if (state.testProviderInjected) {
-      ovModel.textContent = "测试替身";
-    } else {
-      ovModel.textContent = "未配置在线模型";
-    }
-  }
-  renderLiveNotice();
+  renderHostHealthSummary();
 }
 
 function renderLiveNotice() {
@@ -4440,6 +4534,12 @@ async function boot() {
       state.density = ev.target.value === "compact" ? "compact" : "normal";
       applyAppearance();
       savePrefs();
+    });
+  }
+  const localeSel = el("locale-select");
+  if (localeSel) {
+    localeSel.addEventListener("change", (ev) => {
+      void setLocale(ev.target.value);
     });
   }
 
@@ -4634,6 +4734,7 @@ async function boot() {
   }
 
   setInspectorExpanded(false, null);
+  await initLocale();
   renderIdentityHeader();
   renderScopeSummary();
   renderDraftStatus();
@@ -4871,37 +4972,42 @@ function buildProposalPresentation(prop) {
   const titleDiv = document.createElement("div");
   titleDiv.className = "proposal-card-title";
   const bodyDiv = document.createElement("div");
-  bodyDiv.className = "proposal-card-body";
+  bodyDiv.className = "proposal-card-body approval-target";
   const techDetails = document.createElement("details");
   techDetails.className = "proposal-tech-details";
   const techSum = document.createElement("summary");
-  techSum.textContent = "技术详情";
+  techSum.textContent = state.locale === "en" ? "Technical details" : "技术详情";
   const techRaw = document.createElement("div");
-  techRaw.className = "proposal-tech-raw";
+  techRaw.className = "proposal-tech-raw approval-command";
+  const pendingPrefix = pstate === "pending"
+    ? t(state.locale, "proposal.pendingBadge")
+    : (state.locale === "en" ? "Processed" : "已处理");
+  const kindLabel = formatProposalKind(state.locale, prop.kind);
+  const meaningText = formatApprovalMeaning(state.locale, prop.kind);
   if (prop.kind === "scope") {
     const ops = Array.isArray(payload.operations) ? payload.operations.join(",") : "";
     const exact = Array.isArray(payload.exact_paths) ? payload.exact_paths.join(",") : "";
     const prefixes = Array.isArray(payload.write_prefixes) ? payload.write_prefixes.join(",") : "";
     const prot = Array.isArray(payload.protected_paths) ? payload.protected_paths.join(",") : "";
-    titleDiv.textContent = pstate === "pending" ? "等待批准 · 写入范围（尚未写入磁盘）" : "已处理 · 写入范围";
-    bodyDiv.textContent = `目标路径：${exact || prefixes || "指定路径"}${prot ? ` · 受保护路径：${prot}` : ""}`;
+    titleDiv.textContent = `${pendingPrefix} · ${kindLabel}`;
+    bodyDiv.textContent = `${t(state.locale, "proposal.targetPaths", { paths: exact || prefixes || "-" })}${ops ? ` | ${t(state.locale, "proposal.targetOps", { ops })}` : ""}${prot ? ` | protected=${prot}` : ""}${meaningText ? ` — ${meaningText}` : ""}`;
     techRaw.textContent = `[${pstate}] scope ${pid} digest=${(prop.digest || "").slice(0, 12)} ops=[${ops}] exact=[${exact}] prefixes=[${prefixes}] protected=[${prot}] ${payload.verification_plan_summary || ""}`;
   } else if (prop.kind === "verification") {
     const plan = payload.plan || {};
-    const checksDesc = Array.isArray(plan.checks) ? plan.checks.map((c) => c.kind === "exit_code" ? `${c.check_id}[exit_code:仅检查退出码0，非测试通过]` : `${c.check_id}[junit_exact:${Array.isArray(c.expected_tests) ? c.expected_tests.map((t) => `${t.classname}.${t.name}`).join(",") : ""}]`).join("; ") : "";
+    const checksDesc = Array.isArray(plan.checks) ? plan.checks.map((c) => c.kind === "exit_code" ? `${c.check_id}[exit_code]` : `${c.check_id}[junit_exact:${Array.isArray(c.expected_tests) ? c.expected_tests.map((tCase) => `${tCase.classname}.${tCase.name}`).join(",") : ""}]`).join("; ") : "";
     const protMap = payload.protected_shas ? Object.keys(payload.protected_shas).join(",") : "";
-    titleDiv.textContent = pstate === "pending" ? "等待批准 · 验证计划" : "已处理 · 验证计划";
-    bodyDiv.textContent = `验证检查：${Array.isArray(plan.checks) ? plan.checks.map((c) => c.check_id || "check").join("、") : "项目验证"}`;
+    titleDiv.textContent = `${pendingPrefix} · ${kindLabel}`;
+    bodyDiv.textContent = `${t(state.locale, "proposal.targetChecks", { checks: Array.isArray(plan.checks) ? plan.checks.map((c) => c.check_id || "check").join(", ") : "-" })}${meaningText ? ` — ${meaningText}` : ""}`;
     techRaw.textContent = `[${pstate}] verification ${pid} plan=${plan.plan_id || ""} digest=${(prop.digest || "").slice(0, 12)} checks=[${checksDesc}] protected=[${protMap}]`;
   } else if (prop.kind === "command") {
     const cmd = payload.command || prop.command || {};
     const argsText = Array.isArray(cmd.argv) ? cmd.argv.join(" ") : "";
-    titleDiv.textContent = pstate === "pending" ? "等待批准 · 受信任本机命令" : "已处理 · 本机命令";
-    bodyDiv.textContent = `命令：${cmd.executable || ""} ${argsText} | 工作目录：${cmd.cwd || "."} | 用途：${cmd.purpose || "验证"}${cmd.explanation ? `（${cmd.explanation}）` : ""}`;
-    techRaw.textContent = `[${pstate}] command ${pid} digest=${(prop.digest || "").slice(0, 12)} cmd=${cmd.executable || ""} exe_sha=${(cmd.executable_sha256 || "").slice(0, 12)} argv=[${argsText}] cwd=${cmd.cwd || "."} timeout=${cmd.timeout_ms || 0}ms purpose=${cmd.purpose || ""} explanation=${cmd.explanation || ""} （受信任本机执行：非 OS 沙箱，进程可访问本机文件与网络）`;
+    titleDiv.textContent = `${pendingPrefix} · ${kindLabel}`;
+    bodyDiv.textContent = `${t(state.locale, "proposal.targetCommand", { cmd: `${cmd.executable || ""} ${argsText}`.trim() })} | cwd=${cmd.cwd || "."}${meaningText ? ` — ${meaningText}` : ""}`;
+    techRaw.textContent = `[${pstate}] command ${pid} digest=${(prop.digest || "").slice(0, 12)} cmd=${cmd.executable || ""} exe_sha=${(cmd.executable_sha256 || "").slice(0, 12)} argv=[${argsText}] cwd=${cmd.cwd || "."} timeout=${cmd.timeout_ms || 0}ms purpose=${cmd.purpose || ""} explanation=${cmd.explanation || ""}`;
   } else {
-    titleDiv.textContent = pstate === "pending" ? "等待批准 · 操作" : "已处理 · 操作";
-    bodyDiv.textContent = prop.kind || "操作提案";
+    titleDiv.textContent = `${pendingPrefix} · ${kindLabel}`;
+    bodyDiv.textContent = prop.kind || "-";
     techRaw.textContent = `[${pstate}] ${prop.kind || "unknown"} ${pid}`;
   }
   techDetails.append(techSum, techRaw);
@@ -4921,29 +5027,20 @@ function appendAcceptanceCoverage(parts, res) {
 function formatRunStateLabel(run) {
   const st = run && run.state ? run.state : "idle";
   const verif = run && run.verification ? run.verification : "not_run";
-  if (st === "queued") return "排队中";
-  if (st === "running") return "运行中";
-  if (st === "cancelling") return "正在停止";
-  if (st === "cancelled") return "已取消";
-  if (st === "failed") return "执行失败";
-  if (st === "unknown") return "状态未知";
   if (st === "succeeded") {
-    if (verif === "passed") return "已完成 · 验证通过";
-    if (verif === "failed") return "已完成 · 验证失败";
-    if (verif === "not_run") return "已完成 · 未验证";
-    return "已完成 · 待核对";
+    return `${formatRunState(state.locale, st)} · ${formatVerificationStatus(state.locale, verif)}`;
   }
-  return st;
+  return formatRunState(state.locale, st);
 }
 
 function summarizeRunFiles(res) {
   const changedPaths = res && Array.isArray(res.changed_paths) ? res.changed_paths : null;
-  if (changedPaths === null) return "文件变更：待核对";
+  if (changedPaths === null) return state.locale === "en" ? "Files: pending" : "文件变更：待核对";
   const pathNames = changedPaths
     .map((item) => (typeof item === "string" ? item : (item && typeof item.path === "string" ? item.path : "")))
     .filter(Boolean);
-  if (pathNames.length === 0) return "文件变更：未修改文件";
-  return `文件变更：已修改 ${pathNames.join("、")}`;
+  if (pathNames.length === 0) return state.locale === "en" ? "Files: no changes" : "文件变更：未修改文件";
+  return state.locale === "en" ? `Files changed: ${pathNames.join(", ")}` : `文件变更：已修改 ${pathNames.join("、")}`;
 }
 
 function summarizeRunVerification(run, res) {
@@ -4956,13 +5053,13 @@ function summarizeRunVerification(run, res) {
   if (checkEntries.length > 0) {
     const allPassed = checkEntries.every((c) => Boolean(c && c.passed)) && verif === "passed";
     if (allPassed) {
-      return `验证通过（${checkEntries.map((c) => c.check_id || "检查").join("、")}）`;
+      return `${formatVerificationStatus(state.locale, "passed")} (${checkEntries.map((c) => c.check_id || "check").join(", ")})`;
     }
     const anyFailed = checkEntries.some((c) => c && c.passed === false) || verif === "failed";
     if (anyFailed) {
-      return `验证未通过（${checkEntries.map((c) => `${c.check_id || "检查"} 退出码 ${c.exit_code ?? "-"}`).join("、")}）`;
+      return `${formatVerificationStatus(state.locale, "failed")} (${checkEntries.map((c) => `${c.check_id || "check"} exit=${c.exit_code ?? "-"}`).join(", ")})`;
     }
-    return "验证待核对";
+    return formatVerificationStatus(state.locale, verif);
   }
   const accResults = res && res.acceptance && Array.isArray(res.acceptance.results)
     ? res.acceptance.results
@@ -4972,21 +5069,21 @@ function summarizeRunVerification(run, res) {
       accResults.every((r) => r && r.status === "passed" && r.exit_code === 0) &&
       verif === "passed";
     if (allPassed) {
-      return `验证通过（${accResults.map((r) => r.command_id || "验收检查").join("、")}）`;
+      return `${formatVerificationStatus(state.locale, "passed")} (${accResults.map((r) => r.command_id || "check").join(", ")})`;
     }
     const anyFailed =
       accResults.some((r) => r && r.status === "failed") || verif === "failed";
     if (anyFailed) {
-      return `验证未通过（${accResults.map((r) => `${r.command_id || "验收检查"} 退出码 ${r.exit_code ?? "-"}`).join("、")}）`;
+      return `${formatVerificationStatus(state.locale, "failed")} (${accResults.map((r) => `${r.command_id || "check"} exit=${r.exit_code ?? "-"}`).join(", ")})`;
     }
     if (verif === "not_run" || st === "cancelled") {
-      return "验证未运行";
+      return formatVerificationStatus(state.locale, "not_run");
     }
-    return "验证待核对";
+    return formatVerificationStatus(state.locale, verif);
   }
-  if (verif === "failed") return "验证未通过";
-  if (verif === "not_run" || st === "cancelled") return "验证未运行";
-  return "验证待核对";
+  if (verif === "failed") return formatVerificationStatus(state.locale, "failed");
+  if (verif === "not_run" || st === "cancelled") return formatVerificationStatus(state.locale, "not_run");
+  return formatVerificationStatus(state.locale, verif);
 }
 
 function renderTimelineRunCard(run) {
@@ -5003,12 +5100,12 @@ function renderTimelineRunCard(run) {
   left.className = "row compact-row";
   const badge = document.createElement("span");
   badge.className = "chat-role-badge";
-  badge.textContent = "执行";
+  badge.textContent = t(state.locale, "chat.execRole");
   const idCode = document.createElement("span");
   idCode.className = "muted";
   idCode.setAttribute("data-testid", `timeline-run-id-${run.run_id}`);
   idCode.setAttribute("data-run-id", run.run_id);
-  idCode.textContent = "运行记录";
+  idCode.textContent = t(state.locale, "chat.runRecordLabel");
   left.append(badge, idCode);
 
   const stateBadge = document.createElement("span");
@@ -5055,7 +5152,7 @@ function renderTimelineRunCard(run) {
     const stopBtn = document.createElement("button");
     stopBtn.type = "button";
     stopBtn.className = "small-btn";
-    stopBtn.textContent = "停止运行";
+    stopBtn.textContent = t(state.locale, "chat.stopRun");
     stopBtn.setAttribute("data-testid", `timeline-run-cancel-${cardRunId}`);
     stopBtn.addEventListener("click", () => {
       void handleCancelRun(cardSessionId, cardRunId);
@@ -5082,7 +5179,7 @@ function renderTimelineRunCard(run) {
     const diffBtn = document.createElement("button");
     diffBtn.type = "button";
     diffBtn.className = "small-btn";
-    diffBtn.textContent = "查看 Diff";
+    diffBtn.textContent = t(state.locale, "chat.viewDiff");
     diffBtn.setAttribute("data-testid", `timeline-run-diff-${run.run_id}`);
     diffBtn.addEventListener("click", async () => {
       await selectRunView(run.run_id);
@@ -5093,7 +5190,7 @@ function renderTimelineRunCard(run) {
     const cmdBtn = document.createElement("button");
     cmdBtn.type = "button";
     cmdBtn.className = "small-btn";
-    cmdBtn.textContent = "查看命令";
+    cmdBtn.textContent = t(state.locale, "chat.viewChecks");
     cmdBtn.setAttribute("data-testid", `timeline-run-cmd-${run.run_id}`);
     cmdBtn.addEventListener("click", async () => {
       await selectRunView(run.run_id);
@@ -5104,7 +5201,7 @@ function renderTimelineRunCard(run) {
     const followBtn = document.createElement("button");
     followBtn.type = "button";
     followBtn.className = "small-btn";
-    followBtn.textContent = "追问此任务";
+    followBtn.textContent = state.locale === "en" ? "Follow Up" : "追问此任务";
     followBtn.setAttribute("data-testid", `timeline-run-followup-${run.run_id}`);
     followBtn.addEventListener("click", () => {
       const input = el("chat-input");
@@ -5126,7 +5223,7 @@ function renderChatTimeline() {
     const hasConstraints = Boolean(
       state.contextInfo && typeof state.contextInfo.constraints === "string" && state.contextInfo.constraints.trim()
     );
-    pill.textContent = hasConstraints ? "1 约束" : "0 约束";
+    pill.textContent = t(state.locale, "topbar.constraintsPill", { count: hasConstraints ? 1 : 0 });
   }
   const container = el("chat-timeline");
   if (!container) return;
@@ -5565,7 +5662,7 @@ async function submitChatTurn(ev) {
         return;
       }
       setError(err.code, err.message);
-      if (statusEl) statusEl.textContent = `发送失败 (${err.code})`;
+      if (statusEl) statusEl.textContent = t(state.locale, "chat.sendFailed", { code: err.code });
       return;
     }
     if (state.chatDrafts.get(targetSessionId) === rawValue) {
@@ -5612,7 +5709,7 @@ function renderDiffDetailBodyV4(detailEl, selected, src, isTrunc, excl) {
   const tech = document.createElement("details");
   tech.className = "diff-tech-details";
   const sum = document.createElement("summary");
-  sum.textContent = "校验与范围摘要";
+  sum.textContent = t(state.locale, "inspector.diffSummary");
   const meta = document.createElement("div");
   meta.className = "diff-tech-meta";
   meta.textContent = `path=${selected.path} | operation=${selected.operation} | source=${src} | before_sha256=${selected.before_sha256 || "null"} | after_sha256=${selected.after_sha256 || "null"} | 节选截断=${isTrunc}（以下为有界差异节选，不代表文件全文）${excl}`;
@@ -5679,19 +5776,26 @@ function formatProposalTargetBrief(prop) {
   if (prop.kind === "scope") {
     const exact = Array.isArray(payload.exact_paths) ? payload.exact_paths.join(",") : "";
     const prefixes = Array.isArray(payload.write_prefixes) ? payload.write_prefixes.join(",") : "";
-    return `写入范围（${exact || prefixes || "指定路径"}）`;
+    return t(state.locale, "timeline.scopeBrief", {
+      target: exact || prefixes || (state.locale === "zh-CN" ? "指定路径" : "target paths"),
+    });
   }
   if (prop.kind === "verification") {
     const plan = payload.plan || {};
-    const checks = Array.isArray(plan.checks) ? plan.checks.map((c) => c.check_id || "check").join("、") : "验证计划";
-    return `验证计划（${checks}）`;
+    const sep = state.locale === "zh-CN" ? "、" : ", ";
+    const checks = Array.isArray(plan.checks)
+      ? plan.checks.map((c) => c.check_id || "check").join(sep)
+      : formatProposalKind(state.locale, "verification");
+    return t(state.locale, "timeline.verifBrief", { target: checks });
   }
   if (prop.kind === "command") {
     const cmd = payload.command || prop.command || {};
     const argv = Array.isArray(cmd.argv) ? cmd.argv.join(" ") : "";
-    return `命令（${[cmd.executable || "", argv].filter(Boolean).join(" ").trim() || "本机命令"}）`;
+    return t(state.locale, "timeline.cmdBrief", {
+      target: [cmd.executable || "", argv].filter(Boolean).join(" ").trim() || formatProposalKind(state.locale, "command"),
+    });
   }
-  return prop.kind || "提案";
+  return prop.kind || (state.locale === "zh-CN" ? "提案" : "Proposal");
 }
 
 function renderRunProposalSummaryInto(article, sessionId, runId, isTerminal) {
@@ -5713,7 +5817,11 @@ function renderRunProposalSummaryInto(article, sessionId, runId, isTerminal) {
   const box = document.createElement("div");
   box.className = "timeline-run-proposals";
   box.setAttribute("data-testid", `timeline-run-proposals-${runId}`);
-  const labelMap = { approved: "已批准", rejected: "已拒绝", revoked: "已撤销" };
+  const labelMap = {
+    approved: t(state.locale, "timeline.decisionApproved"),
+    rejected: t(state.locale, "timeline.decisionRejected"),
+    revoked: t(state.locale, "timeline.decisionRevoked"),
+  };
   for (const p of decided) {
     const st = p.state || p.status || "";
     const row = document.createElement("span");
@@ -5789,7 +5897,7 @@ function renderExecutionOfferCard(turn) {
     cb.type = "checkbox";
     cb.setAttribute("data-testid", `offer-confirm-scope-${turn.turn_id}`);
     const cbText = document.createElement("span");
-    cbText.textContent = "我已确认当前项目的授权边界与检查要求";
+    cbText.textContent = t(state.locale, "chat.offerConfirmLabel");
     label.append(cb, cbText);
 
     const actions = document.createElement("div");
@@ -5798,7 +5906,7 @@ function renderExecutionOfferCard(turn) {
     btn.type = "button";
     btn.className = "primary-btn";
     btn.setAttribute("data-testid", `offer-confirm-btn-${turn.turn_id}`);
-    btn.textContent = "确认执行";
+    btn.textContent = t(state.locale, "chat.offerConfirmBtn");
     btn.addEventListener("click", () => {
       void handleConfirmOffer(turn.session_id, turn.turn_id, offer, cb, btn);
     });
@@ -5883,4 +5991,77 @@ async function handleConfirmOffer(sessionId, turnId, offer, scopeCb, btn) {
     state.pendingLocks.delete(lockKey);
     if (btn) btn.disabled = false;
   }
+}
+
+async function initLocale() {
+  try {
+    i18nMod = await import("/i18n.js");
+  } catch {
+    i18nMod = null;
+  }
+  let resolved = detectBrowserLocale(LOCALE_STORAGE_KEY);
+  try {
+    if (window.forecontractDesktop && typeof window.forecontractDesktop.getLocale === "function") {
+      const deskLoc = await window.forecontractDesktop.getLocale();
+      resolved = normalizeLocale(deskLoc);
+    }
+  } catch {
+    // keep browser-resolved fallback
+  }
+  state.locale = resolved === "zh-CN" ? "zh-CN" : "en";
+  applyStaticTranslations(document, state.locale);
+}
+
+function rerenderAllLocalizedViews() {
+  const inspBtn = el("toggle-inspector-btn");
+  if (inspBtn) {
+    inspBtn.textContent = t(
+      state.locale,
+      state.inspectorExpanded ? "topbar.collapseInspector" : "topbar.expandInspector"
+    );
+  }
+  const pageNames = getPageNames(state.locale);
+  const crumb = el("page-crumb");
+  if (crumb && pageNames[state.activePage]) {
+    crumb.textContent = pageNames[state.activePage];
+  }
+  renderIdentityHeader();
+  renderHostHealthSummary();
+  renderScopeSummary();
+  renderDraftStatus();
+  renderProjects();
+  renderSessions();
+  renderChatRail();
+  renderChatTimeline();
+  renderProposals();
+  renderExtensionProposals();
+  renderQuestions();
+  renderCommands();
+  renderUsage();
+  renderRunHistorySelect();
+  renderInbox();
+  renderSettingsSearchResults();
+  if (state.currentRunView) {
+    renderDiffs(state.currentRunView.result?.diffs || [], state.currentRunView);
+  }
+}
+
+async function setLocale(nextLocale) {
+  const normalized = nextLocale === "zh-CN" ? "zh-CN" : "en";
+  state.locale = normalized;
+  if (window.forecontractDesktop && typeof window.forecontractDesktop.setLocale === "function") {
+    try {
+      await window.forecontractDesktop.setLocale(normalized);
+    } catch {
+      // ignore IPC errors in UI
+    }
+  } else {
+    try {
+      window.localStorage.setItem(LOCALE_STORAGE_KEY, normalized);
+    } catch {
+      // ignore storage errors
+    }
+  }
+  applyStaticTranslations(document, state.locale);
+  rerenderAllLocalizedViews();
 }

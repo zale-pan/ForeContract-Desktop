@@ -51,7 +51,7 @@ def test_discuss_execute_approve_and_follow_up(tmp_path: Path) -> None:
         with sync_playwright() as pw:
             browser = _launch_chromium(pw)
             try:
-                page = browser.new_page(viewport={"width": 1280, "height": 800})
+                page = browser.new_page(viewport={"width": 1280, "height": 800}, locale="zh-CN")
                 page.on(
                     "console",
                     lambda m: console_errors.append(m.text) if m.type == "error" else None,
@@ -569,7 +569,7 @@ def test_single_composer_session_and_refresh(tmp_path: Path) -> None:
         with sync_playwright() as pw:
             browser = _launch_chromium(pw)
             try:
-                page = browser.new_page(viewport={"width": 1280, "height": 800})
+                page = browser.new_page(viewport={"width": 1280, "height": 800}, locale="zh-CN")
 
                 def _on_pageerror(err: Any) -> None:
                     kind, detail = _project_error(
@@ -1170,7 +1170,7 @@ def test_cancel_card_readback_deadline(tmp_path: Path) -> None:
         with sync_playwright() as pw:
             browser = _launch_chromium(pw)
             try:
-                page = browser.new_page(viewport={"width": 1280, "height": 800})
+                page = browser.new_page(viewport={"width": 1280, "height": 800}, locale="zh-CN")
 
                 def _on_pageerror(err: Any) -> None:
                     kind, detail = _project_error(
@@ -1453,7 +1453,7 @@ def test_cancel_resync_pending_read(tmp_path: Path) -> None:
         with sync_playwright() as pw:
             browser = _launch_chromium(pw)
             try:
-                page = browser.new_page(viewport={"width": 1280, "height": 800})
+                page = browser.new_page(viewport={"width": 1280, "height": 800}, locale="zh-CN")
                 page.on("pageerror", lambda err: page_errors.append(str(err)))
 
                 def _on_resp(resp: Any) -> None:
@@ -1753,7 +1753,7 @@ def test_one_send_followup_approval_refresh(tmp_path: Path) -> None:
             browser = _launch_chromium(pw)
             page = None
             try:
-                page = browser.new_page(viewport={"width": 1280, "height": 800})
+                page = browser.new_page(viewport={"width": 1280, "height": 800}, locale="zh-CN")
                 post_reqs: list[str] = []
                 page.on(
                     "request",

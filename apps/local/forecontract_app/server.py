@@ -291,6 +291,13 @@ def create_app(
             media_type="application/javascript; charset=utf-8",
         )
 
+    @app.get("/i18n.js", include_in_schema=False)
+    async def _serve_i18n_js() -> Response:
+        return Response(
+            content=(_STATIC_DIR / "i18n.js").read_bytes(),
+            media_type="application/javascript; charset=utf-8",
+        )
+
     @app.get("/style.css", include_in_schema=False)
     async def _serve_style_css() -> Response:
         return Response(

@@ -1686,3 +1686,68 @@ html[data-theme="dark"] .timeline-offer-card {
 .chat-empty-hint[hidden] {
   display: none;
 }
+
+/* DESK-I18N: Bilingual long-label wrapping, focus visibility, and narrow-screen layout */
+.nav-btn,
+.tab-btn,
+.small-btn,
+.primary-btn,
+.constraint-pill {
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+
+.nav-utility-row {
+  grid-template-columns: 1fr;
+}
+
+.nav-utility-row .nav-btn-compact {
+  min-width: 0;
+  justify-content: flex-start;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.tabs {
+  flex-wrap: wrap;
+}
+
+.proposal-item,
+.approval-target,
+.approval-command,
+.checkbox-label {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+button:focus-visible,
+select:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #4338ca;
+  outline-offset: 2px;
+}
+
+@media (max-width: 720px) {
+  .topbar {
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .actions {
+    flex-wrap: wrap;
+  }
+
+  .proposal-actions,
+  .pending-approvals-card .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}

@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="app-shell">
-    <aside id="workspace-nav" data-testid="workspace-nav" class="sidebar" aria-label="主导航">
+    <aside id="workspace-nav" data-testid="workspace-nav" class="sidebar" aria-label="主导航" data-i18n-aria-label="nav.aria">
       <div class="brand">
         <span class="logo f-arrow-logo" data-testid="brand-logo" aria-hidden="true">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="28" height="28"><rect width="32" height="32" rx="8" fill="#4338ca"/><g fill="none" stroke="#fff" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 9v14"/><path d="M8 9h9"/><path d="M8 16h6"/><path d="m20 12 5 4-5 4"/></g></svg>
@@ -17,87 +17,87 @@
       </div>
 
       <div class="rail-project-box">
-        <label for="chat-project-select" class="rail-label">项目</label>
+        <label for="chat-project-select" class="rail-label" data-i18n="nav.projectLabel">项目</label>
         <select id="chat-project-select" data-testid="chat-project-select" class="rail-select"></select>
       </div>
 
       <div class="rail-sessions-box">
         <div class="rail-subhead row between">
-          <span>会话列表</span>
-          <button id="chat-new-session-btn" data-testid="chat-new-session" type="button" class="small-btn">+ 新建</button>
+          <span data-i18n="nav.sessions">会话列表</span>
+          <button id="chat-new-session-btn" data-testid="chat-new-session" type="button" class="small-btn" data-i18n="nav.newSessionShort">+ 新建</button>
         </div>
         <ul id="chat-session-list" data-testid="chat-session-list" class="chat-session-list"></ul>
       </div>
 
       <div class="sidebar-bottom">
-        <nav class="nav-utility-row" aria-label="工作区快捷入口">
-          <button id="nav-chat-btn" data-testid="nav-chat" data-nav-page="chat" class="nav-btn nav-btn-compact active" type="button" title="当前会话" aria-label="当前会话">
+        <nav class="nav-utility-row" aria-label="工作区快捷入口" data-i18n-aria-label="nav.shortcutsAria">
+          <button id="nav-chat-btn" data-testid="nav-chat" data-nav-page="chat" class="nav-btn nav-btn-compact active" type="button" title="当前会话" aria-label="当前会话" data-i18n-title="nav.chatTitle" data-i18n-aria-label="nav.chatTitle">
             <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.76c0 1.6 1.123 2.994 2.707 3.227 1.087.16 2.185.283 3.293.369V21l4.076-4.076a1.526 1.526 0 0 1 1.037-.443 48.282 48.282 0 0 0 5.68-.494c1.584-.233 2.707-1.626 2.707-3.228V6.741c0-1.602-1.123-2.995-2.707-3.228A48.394 48.394 0 0 0 12 3c-2.392 0-4.744.175-7.043.513C3.373 3.746 2.25 5.14 2.25 6.741v6.018Z"/>
 </svg></span>
-            <span class="nav-label">会话</span>
+            <span class="nav-label" data-i18n="nav.chat">会话</span>
           </button>
-          <button id="nav-projects-btn" data-testid="nav-projects" data-nav-page="projects" class="nav-btn nav-btn-compact" type="button" title="项目" aria-label="项目">
+          <button id="nav-projects-btn" data-testid="nav-projects" data-nav-page="projects" class="nav-btn nav-btn-compact" type="button" title="项目" aria-label="项目" data-i18n-title="nav.projectsTitle" data-i18n-aria-label="nav.projectsTitle">
             <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12.75V12A2.25 2.25 0 0 1 4.5 9.75h15A2.25 2.25 0 0 1 21.75 12v.75m-8.69-6.44-2.12-2.12a1.5 1.5 0 0 0-1.061-.44H4.5A2.25 2.25 0 0 0 2.25 6v12a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18V9a2.25 2.25 0 0 0-2.25-2.25h-5.379a1.5 1.5 0 0 1-1.06-.44Z"/>
 </svg></span>
-            <span class="nav-label">项目</span>
+            <span class="nav-label" data-i18n="nav.projects">项目</span>
           </button>
-          <button id="nav-extensions-btn" data-testid="nav-extensions" data-nav-page="extensions" class="nav-btn nav-btn-compact" type="button" title="扩展" aria-label="扩展">
+          <button id="nav-extensions-btn" data-testid="nav-extensions" data-nav-page="extensions" class="nav-btn nav-btn-compact" type="button" title="扩展" aria-label="扩展" data-i18n-title="nav.extensionsTitle" data-i18n-aria-label="nav.extensionsTitle">
             <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M14.25 6.087c0-.355.186-.676.401-.959.221-.29.349-.634.349-1.003 0-1.036-1.007-1.875-2.25-1.875s-2.25.84-2.25 1.875c0 .369.128.713.349 1.003.215.283.401.604.401.959v0a.64.64 0 0 1-.657.643 48.39 48.39 0 0 1-4.163-.3c.186 1.613.293 3.25.315 4.907a.656.656 0 0 1-.658.663v0c-.355 0-.676-.186-.959-.401a1.647 1.647 0 0 0-1.003-.349c-1.036 0-1.875 1.007-1.875 2.25s.84 2.25 1.875 2.25c.369 0 .713-.128 1.003-.349.283-.215.604-.401.959-.401v0c.31 0 .555.26.532.57a48.039 48.039 0 0 1-.642 5.056c1.518.19 3.058.309 4.616.354a.64.64 0 0 0 .657-.643v0c0-.355-.186-.676-.401-.959a1.647 1.647 0 0 1-.349-1.003c0-1.035 1.008-1.875 2.25-1.875 1.243 0 2.25.84 2.25 1.875 0 .369-.128.713-.349 1.003-.215.283-.4.604-.4.959v0c0 .333.277.599.61.58a48.1 48.1 0 0 0 5.427-.63 48.05 48.05 0 0 0 .582-4.717.532.532 0 0 0-.533-.57v0c-.355 0-.676.186-.959.401-.29.221-.634.349-1.003.349-1.035 0-1.875-1.007-1.875-2.25s.84-2.25 1.875-2.25c.37 0 .713.128 1.003.349.283.215.604.401.96.401v0a.656.656 0 0 0 .658-.663 48.422 48.422 0 0 0-.37-5.36c-1.886.342-3.81.574-5.766.689a.578.578 0 0 1-.61-.58v0Z"/>
 </svg></span>
-            <span class="nav-label">扩展</span>
+            <span class="nav-label" data-i18n="nav.extensions">扩展</span>
           </button>
         </nav>
-        <nav class="nav-stack" aria-label="工作台页面">
-          <button id="nav-inbox-btn" data-testid="nav-inbox" data-nav-page="inbox" class="nav-btn" type="button" title="审批收件箱" aria-label="审批收件箱">
+        <nav class="nav-stack" aria-label="工作台页面" data-i18n-aria-label="nav.pagesAria">
+          <button id="nav-inbox-btn" data-testid="nav-inbox" data-nav-page="inbox" class="nav-btn" type="button" title="审批收件箱" aria-label="审批收件箱" data-i18n-title="nav.inbox" data-i18n-aria-label="nav.inbox">
             <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 13.5h3.86a2.25 2.25 0 0 1 2.012 1.244l.256.512a2.25 2.25 0 0 0 2.013 1.244h3.218a2.25 2.25 0 0 0 2.013-1.244l.256-.512a2.25 2.25 0 0 1 2.013-1.244h3.859m-19.5.338V18a2.25 2.25 0 0 0 2.25 2.25h15A2.25 2.25 0 0 0 21.75 18v-4.162c0-.224-.034-.447-.1-.661L19.24 5.338a2.25 2.25 0 0 0-2.15-1.588H6.911a2.25 2.25 0 0 0-2.15 1.588L2.35 13.177a2.25 2.25 0 0 0-.1.661Z"/>
 </svg></span>
-            <span class="nav-label">审批收件箱</span>
+            <span class="nav-label" data-i18n="nav.inbox">审批收件箱</span>
             <span id="inbox-badge" data-testid="inbox-badge" class="nav-badge" hidden>0</span>
           </button>
-          <button id="nav-history-btn" data-testid="nav-history" data-nav-page="history" class="nav-btn" type="button" title="运行历史" aria-label="运行历史">
+          <button id="nav-history-btn" data-testid="nav-history" data-nav-page="history" class="nav-btn" type="button" title="运行历史" aria-label="运行历史" data-i18n-title="nav.history" data-i18n-aria-label="nav.history">
             <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M12 6v6h4.5m4.5 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"/>
 </svg></span>
-            <span class="nav-label">运行历史</span>
+            <span class="nav-label" data-i18n="nav.history">运行历史</span>
           </button>
-          <button id="nav-settings-btn" data-testid="nav-settings" data-nav-page="settings" class="nav-btn" type="button" title="设置" aria-label="设置">
+          <button id="nav-settings-btn" data-testid="nav-settings" data-nav-page="settings" class="nav-btn" type="button" title="设置" aria-label="设置" data-i18n-title="nav.settings" data-i18n-aria-label="nav.settings">
             <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 0 1 1.37.49l1.296 2.247a1.125 1.125 0 0 1-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 0 1 0 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 0 1-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 0 1-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 0 1-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 0 1-1.369-.49l-1.297-2.247a1.125 1.125 0 0 1 .26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 0 1 0-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 0 1-.26-1.43l1.297-2.247a1.125 1.125 0 0 1 1.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28Z"/>
   <path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/>
 </svg></span>
-            <span class="nav-label">设置</span>
+            <span class="nav-label" data-i18n="nav.settings">设置</span>
           </button>
         </nav>
         <div class="sidebar-foot" data-testid="host-status-banner" id="host-status-banner">
           <span class="status-dot" aria-hidden="true">●</span>
-          <span id="host-mode-label" class="nav-label">正在连接宿主…</span>
+          <span id="host-mode-label" class="nav-label" data-i18n="host.connecting">正在连接宿主…</span>
         </div>
       </div>
     </aside>
 
     <div class="main-column">
-      <header class="topbar" aria-label="当前工作区上下文">
-        <button id="navigation-toggle" data-testid="navigation-toggle" class="mobile-menu-btn" type="button" aria-expanded="false" aria-controls="workspace-nav">导航</button>
+      <header class="topbar" aria-label="当前工作区上下文" data-i18n-aria-label="topbar.aria">
+        <button id="navigation-toggle" data-testid="navigation-toggle" class="mobile-menu-btn" type="button" aria-expanded="false" aria-controls="workspace-nav" data-i18n="nav.toggle">导航</button>
         <div class="crumb">
-          <span id="current-project-name" class="topbar-project-name">未选择项目</span>
+          <span id="current-project-name" class="topbar-project-name" data-i18n="topbar.noProject">未选择项目</span>
           <span class="crumb-sep">/</span>
-          <strong id="page-crumb" data-testid="page-crumb" hidden>会话</strong>
-          <h1 id="run-heading" data-testid="chat-session-title" class="topbar-session-title">新对话</h1>
+          <strong id="page-crumb" data-testid="page-crumb" hidden data-i18n="nav.chat">会话</strong>
+          <h1 id="run-heading" data-testid="chat-session-title" class="topbar-session-title" data-i18n="topbar.newChat">新对话</h1>
           <button id="chat-constraints-pill" data-testid="chat-constraints-pill" type="button" class="constraint-pill">0 约束</button>
           <code id="current-project" data-testid="current-project" class="sr-only">-</code>
           <code id="current-session" data-testid="current-session" class="sr-only">-</code>
         </div>
         <div class="identity-pills">
-          <div class="pill conn-pill" title="连接断开不等于运行失败或成功">
+          <div class="pill conn-pill" title="连接断开不等于运行失败或成功" data-i18n-title="topbar.connTitle">
             <span class="status-dot" aria-hidden="true">●</span>
             <code id="connection-state" data-testid="connection-state">idle</code>
-            <button id="reconnect-btn" data-testid="reconnect-stream" class="small-btn" type="button" hidden>重连事件流</button>
+            <button id="reconnect-btn" data-testid="reconnect-stream" class="small-btn" type="button" hidden data-i18n="topbar.reconnect">重连事件流</button>
           </div>
-          <button id="toggle-inspector-btn" data-testid="toggle-inspector" class="small-btn" type="button" aria-expanded="false" aria-controls="chat-inspector">展开详情</button>
+          <button id="toggle-inspector-btn" data-testid="toggle-inspector" class="small-btn" type="button" aria-expanded="false" aria-controls="chat-inspector" data-i18n="topbar.expandInspector">展开详情</button>
         </div>
       </header>
 
@@ -105,45 +105,45 @@
         <!-- Page 1: Projects -->
         <section id="page-projects" data-page="projects" class="page-view" hidden aria-labelledby="projects-heading">
           <div class="page-header">
-            <h1 id="projects-heading">项目与会话</h1>
-            <p class="sub">创建受控示例或显式只读登记本地目录，按项目隔离并打开会话。</p>
+            <h1 id="projects-heading" data-i18n="projects.heading">项目与会话</h1>
+            <p class="sub" data-i18n="projects.sub">创建受控示例或显式只读登记本地目录，按项目隔离并打开会话。</p>
           </div>
 
           <div class="two-col-cards">
             <section class="card">
-              <h2>创建受控示例项目</h2>
+              <h2 data-i18n="projects.createTitle">创建受控示例项目</h2>
               <div class="row column">
-                <label for="project-name-input">项目名（<code>[a-z][a-z0-9-]{0,31}</code>）</label>
+                <label for="project-name-input" data-i18n="projects.nameLabel">项目名（[a-z][a-z0-9-]{0,31}）</label>
                 <input id="project-name-input" data-testid="project-name" type="text" placeholder="metrics-demo" autocomplete="off">
-                <button id="create-project-btn" data-testid="create-project" type="button">创建示例项目</button>
+                <button id="create-project-btn" data-testid="create-project" type="button" data-i18n="projects.createBtn">创建示例项目</button>
               </div>
             </section>
 
             <section class="card">
-              <h2>登记本机已有目录</h2>
+              <h2 data-i18n="projects.registerTitle">登记本机已有目录</h2>
               <div class="row column register-box">
-                <label for="register-root-input">目录绝对路径（需与宿主允许根精确一致）</label>
+                <label for="register-root-input" data-i18n="projects.rootLabel">目录绝对路径（需与宿主允许根精确一致）</label>
                 <input id="register-root-input" data-testid="register-root" type="text" placeholder="D:\\path\\to\\project" autocomplete="off">
                 <label class="checkbox-label">
                   <input id="confirm-read-input" data-testid="confirm-read" type="checkbox">
-                  <span>确认只读登记已有项目</span>
+                  <span data-i18n="projects.confirmRead">确认只读登记已有项目</span>
                 </label>
-                <button id="register-project-btn" data-testid="register-project" type="button" class="primary-btn">登记已有项目</button>
+                <button id="register-project-btn" data-testid="register-project" type="button" class="primary-btn" data-i18n="projects.registerBtn">登记已有项目</button>
               </div>
             </section>
           </div>
 
           <section class="card">
             <div class="row between">
-              <h2>已登记项目</h2>
+              <h2 data-i18n="projects.registeredHeading">已登记项目</h2>
             </div>
             <ul id="project-list" data-testid="project-list" class="list nav-list"></ul>
           </section>
 
           <section class="card">
             <div class="row between">
-              <h2>当前项目会话（按 <code>project_id</code> 过滤）</h2>
-              <button id="new-session-btn" data-testid="new-session" type="button" class="primary-btn">新建会话</button>
+              <h2 data-i18n="projects.sessionsHeading">当前项目会话（按 project_id 过滤）</h2>
+              <button id="new-session-btn" data-testid="new-session" type="button" class="primary-btn" data-i18n="projects.newSessionBtn">新建会话</button>
             </div>
             <ul id="session-list" data-testid="session-list" class="list nav-list"></ul>
           </section>
@@ -156,13 +156,13 @@
               <div id="chat-scroll-area" class="chat-scroll-area">
                 <div id="chat-timeline" data-testid="chat-timeline" class="chat-timeline" aria-live="polite">
                   <div class="chat-empty-hint muted" id="chat-empty-hint" hidden>
-                    <span>打开或登记项目后即可开始对话。</span>
-                    <button id="empty-open-projects-btn" data-testid="empty-open-projects" type="button" class="small-btn">打开项目</button>
+                    <span data-i18n="chat.emptyHint">打开或登记项目后即可开始对话。</span>
+                    <button id="empty-open-projects-btn" data-testid="empty-open-projects" type="button" class="small-btn" data-i18n="chat.openProjectsBtn">打开项目</button>
                   </div>
                 </div>
 
                 <section id="pending-approvals-card" data-testid="pending-approvals-card" class="card pending-approvals-card" hidden>
-                  <h2 class="pending-approvals-heading">待审批与运行提问</h2>
+                  <h2 class="pending-approvals-heading" data-i18n="chat.pendingHeading">待审批与运行提问</h2>
                   <ul id="proposal-list" data-testid="proposal-list" class="list"></ul>
                   <ul id="extension-proposal-list" data-testid="extension-proposal-list" class="list"></ul>
                   <ul id="question-list" data-testid="question-list" class="list"></ul>
@@ -171,15 +171,15 @@
 
               <form id="chat-composer" data-testid="chat-composer" class="card chat-composer">
                 <div id="chat-references-bar" data-testid="chat-references-bar" class="chat-references-bar" hidden></div>
-                <textarea id="chat-input" data-testid="chat-input" rows="2" aria-label="会话输入" placeholder="给 ForeContract 发消息…"></textarea>
+                <textarea id="chat-input" data-testid="chat-input" rows="2" aria-label="会话输入" placeholder="给 ForeContract 发消息…" data-i18n-aria-label="chat.inputAria" data-i18n-placeholder="chat.inputPlaceholder"></textarea>
                 <div class="row between composer-actions-row">
                   <div class="row compact-row">
-                    <button id="only-ask-toggle-btn" data-testid="only-ask-toggle" class="small-btn only-ask-pill" type="button" aria-pressed="false" title="仅使用只读工具回答，不提议执行">只问</button>
+                    <button id="only-ask-toggle-btn" data-testid="only-ask-toggle" class="small-btn only-ask-pill" type="button" aria-pressed="false" title="仅使用只读工具回答，不提议执行" data-i18n="chat.onlyAsk" data-i18n-title="chat.onlyAskTitle">只问</button>
                     <span id="chat-composer-status" data-testid="chat-composer-status" class="muted composer-hint"></span>
                   </div>
                   <div class="actions">
-                    <button id="cancel-run-btn" data-testid="cancel-run" type="button" hidden>停止运行</button>
-                    <button id="chat-send-btn" data-testid="chat-send" type="submit" class="primary-btn send-arrow-btn" aria-label="发送消息" title="发送消息">↑</button>
+                    <button id="cancel-run-btn" data-testid="cancel-run" type="button" hidden data-i18n="chat.stopRun">停止运行</button>
+                    <button id="chat-send-btn" data-testid="chat-send" type="submit" class="primary-btn send-arrow-btn" aria-label="发送消息" title="发送消息" data-i18n-aria-label="chat.sendAria" data-i18n-title="chat.sendAria">↑</button>
                   </div>
                 </div>
 
@@ -187,98 +187,98 @@
               </form>
             </div>
 
-            <aside id="chat-inspector" data-testid="chat-inspector" class="inspector" hidden tabindex="-1" aria-label="运行详情与工作区审阅">
+            <aside id="chat-inspector" data-testid="chat-inspector" class="inspector" hidden tabindex="-1" aria-label="运行详情与工作区审阅" data-i18n-aria-label="inspector.aria">
               <div class="row between inspector-head-row">
-                <h2>运行详情</h2>
+                <h2 data-i18n="inspector.heading">运行详情</h2>
                 <div class="row compact-row">
-                  <span class="muted" id="inspector-run-badge" data-testid="inspector-binding-meta">当前活动</span>
-                  <button id="close-inspector-btn" data-testid="close-inspector" class="small-btn" type="button" aria-label="关闭详情抽屉">关闭</button>
+                  <span class="muted" id="inspector-run-badge" data-testid="inspector-binding-meta" data-i18n="inspector.badgeCurrent">当前活动</span>
+                  <button id="close-inspector-btn" data-testid="close-inspector" class="small-btn" type="button" aria-label="关闭详情抽屉" data-i18n="inspector.close" data-i18n-aria-label="inspector.close">关闭</button>
                 </div>
               </div>
 
-              <div class="tabs" role="tablist" aria-label="详情视图">
-                <button class="tab-btn active" data-inspector-tab="diff" data-testid="tab-diff" type="button">运行差异</button>
-                <button class="tab-btn" data-inspector-tab="files" data-testid="tab-files" type="button">文件</button>
-                <button class="tab-btn" data-inspector-tab="git" data-testid="tab-git" type="button">Git</button>
-                <button class="tab-btn" data-inspector-tab="commands" data-testid="tab-commands" type="button">命令</button>
-                <button class="tab-btn" data-inspector-tab="checks" data-testid="tab-checks" type="button">验证</button>
-                <button class="tab-btn" data-inspector-tab="events" data-testid="tab-events" type="button">事件</button>
+              <div class="tabs" role="tablist" aria-label="详情视图" data-i18n-aria-label="inspector.tabsAria">
+                <button class="tab-btn active" data-inspector-tab="diff" data-testid="tab-diff" type="button" data-i18n="inspector.tabDiff">运行差异</button>
+                <button class="tab-btn" data-inspector-tab="files" data-testid="tab-files" type="button" data-i18n="inspector.tabFiles">文件</button>
+                <button class="tab-btn" data-inspector-tab="git" data-testid="tab-git" type="button" data-i18n="inspector.tabGit">Git</button>
+                <button class="tab-btn" data-inspector-tab="commands" data-testid="tab-commands" type="button" data-i18n="inspector.tabCommands">命令</button>
+                <button class="tab-btn" data-inspector-tab="checks" data-testid="tab-checks" type="button" data-i18n="inspector.tabChecks">验证</button>
+                <button class="tab-btn" data-inspector-tab="events" data-testid="tab-events" type="button" data-i18n="inspector.tabEvents">事件</button>
               </div>
 
               <!-- Tab 1: Run Diff -->
               <div id="inspector-panel-diff" data-inspector-panel="diff">
                 <div class="row between">
-                  <label for="diff-file-select">差异文件</label>
+                  <label for="diff-file-select" data-i18n="inspector.diffLabel">差异文件</label>
                   <select id="diff-file-select" data-testid="diff-file-select">
-                    <option value="">（尚无文件差异）</option>
+                    <option value="" data-i18n="inspector.diffEmptyOption">（尚无文件差异）</option>
                   </select>
-                  <button id="quote-diff-in-chat-btn" data-testid="quote-diff-in-chat" class="small-btn" type="button" hidden>带入对话</button>
+                  <button id="quote-diff-in-chat-btn" data-testid="quote-diff-in-chat" class="small-btn" type="button" hidden data-i18n="inspector.quoteDiff">带入对话</button>
                 </div>
-                <div id="diff-detail" data-testid="diff-detail" class="diff-detail">暂无可查看的运行差异。</div>
-                <h3>最终变更文件（changed_paths）</h3>
+                <div id="diff-detail" data-testid="diff-detail" class="diff-detail" data-i18n="inspector.diffEmpty">暂无可查看的运行差异。</div>
+                <h3 data-i18n="inspector.changedPaths">最终变更文件（changed_paths）</h3>
                 <ul id="changed-paths" data-testid="changed-paths" class="list"></ul>
-                <h3>全部运行差异条目</h3>
+                <h3 data-i18n="inspector.allDiffs">全部运行差异条目</h3>
                 <ul id="diff-list" data-testid="diff-list" class="list"></ul>
               </div>
 
               <!-- Tab 2: Workspace Files -->
               <div id="inspector-panel-files" data-inspector-panel="files" hidden>
                 <div class="row between">
-                  <span class="muted">当前工作区磁盘文件（只读）</span>
-                  <button id="refresh-files-btn" data-testid="refresh-files" class="small-btn" type="button">刷新文件</button>
+                  <span class="muted" data-i18n="inspector.filesNote">当前工作区磁盘文件（只读）</span>
+                  <button id="refresh-files-btn" data-testid="refresh-files" class="small-btn" type="button" data-i18n="inspector.refreshFiles">刷新文件</button>
                 </div>
                 <div id="files-path-bar" data-testid="files-path-bar" class="notice">路径：.</div>
                 <div id="files-status" data-testid="files-status" class="notice"></div>
                 <ul id="workspace-files-list" data-testid="workspace-files-list" class="list"></ul>
-                <button id="files-next-btn" data-testid="files-next" class="small-btn" type="button" hidden>加载更多文件</button>
+                <button id="files-next-btn" data-testid="files-next" class="small-btn" type="button" hidden data-i18n="inspector.loadMoreFiles">加载更多文件</button>
                 <div id="chat-file-comparison-note" data-testid="chat-file-comparison-note" class="notice" hidden></div>
-                <div id="workspace-file-preview" data-testid="workspace-file-preview" class="diff-detail">选择文件查看当前磁盘文本。</div>
+                <div id="workspace-file-preview" data-testid="workspace-file-preview" class="diff-detail" data-i18n="inspector.filePreviewEmpty">选择文件查看当前磁盘文本。</div>
               </div>
 
               <!-- Tab 3: Read-only Git -->
               <div id="inspector-panel-git" data-inspector-panel="git" hidden>
                 <div class="row between">
-                  <span class="muted">本机只读 Git 审阅（不自动轮询）</span>
-                  <button id="refresh-git-btn" data-testid="refresh-git" class="small-btn" type="button">刷新 Git</button>
+                  <span class="muted" data-i18n="inspector.gitNote">本机只读 Git 审阅（不自动轮询）</span>
+                  <button id="refresh-git-btn" data-testid="refresh-git" class="small-btn" type="button" data-i18n="inspector.refreshGit">刷新 Git</button>
                 </div>
-                <div id="git-meta-bar" data-testid="git-meta-bar" class="notice">尚未加载 Git 状态</div>
+                <div id="git-meta-bar" data-testid="git-meta-bar" class="notice" data-i18n="inspector.gitNotLoaded">尚未加载 Git 状态</div>
                 <ul id="git-entries-list" data-testid="git-entries-list" class="list"></ul>
                 <div class="tabs">
-                  <button id="git-area-index-btn" data-testid="git-area-index" data-git-area="index" class="tab-btn active" type="button">暂存区（HEAD → 暂存区）</button>
-                  <button id="git-area-worktree-btn" data-testid="git-area-worktree" data-git-area="worktree" class="tab-btn" type="button">工作树（暂存区 → 磁盘）</button>
+                  <button id="git-area-index-btn" data-testid="git-area-index" data-git-area="index" class="tab-btn active" type="button" data-i18n="inspector.gitIndex">暂存区（HEAD → 暂存区）</button>
+                  <button id="git-area-worktree-btn" data-testid="git-area-worktree" data-git-area="worktree" class="tab-btn" type="button" data-i18n="inspector.gitWorktree">工作树（暂存区 → 磁盘）</button>
                 </div>
                 <div id="git-diff-area-note" data-testid="git-diff-area-note" class="notice"></div>
-                <div id="git-diff-detail" data-testid="git-diff-detail" class="diff-detail">选择变更路径查看对应区域补丁。</div>
+                <div id="git-diff-detail" data-testid="git-diff-detail" class="diff-detail" data-i18n="inspector.gitDiffEmpty">选择变更路径查看对应区域补丁。</div>
               </div>
 
               <!-- Tab 4: Commands -->
               <div id="inspector-panel-commands" data-inspector-panel="commands" hidden>
-                <h3>命令执行与增量输出</h3>
+                <h3 data-i18n="inspector.commandsHeading">命令执行与增量输出</h3>
                 <ul id="command-list" data-testid="command-list" class="list"></ul>
               </div>
 
               <!-- Tab 5: Verification -->
               <div id="inspector-panel-checks" data-inspector-panel="checks" hidden>
-                <h3>验证与覆盖来源</h3>
+                <h3 data-i18n="inspector.checksHeading">验证与覆盖来源</h3>
                 <div id="coverage-summary" data-testid="coverage-summary" class="notice"></div>
               </div>
 
               <!-- Tab 6: Events -->
               <div id="inspector-panel-events" data-inspector-panel="events" hidden>
-                <h3>事件与工具反馈流</h3>
+                <h3 data-i18n="inspector.eventsHeading">事件与工具反馈流</h3>
                 <div id="events-truncation-notice" data-testid="events-truncation-notice" class="notice"></div>
                 <ol id="tool-events" data-testid="tool-events" class="event-list"></ol>
               </div>
 
               <div class="status-grid inspector-status-footer">
-                <div>Session ID：<span id="inspector-session-id" data-testid="inspector-session-id">-</span></div>
-                <div>Run ID：<span id="run-id" data-testid="run-id">-</span></div>
-                <div>状态：<span id="run-state" data-testid="run-state">idle</span></div>
-                <div>验收：<span id="verification" data-testid="verification">not_run</span></div>
-                <div>原因码：<span id="reason-code" data-testid="reason-code">-</span></div>
+                <div><span data-i18n="inspector.sessionId">Session ID：</span><span id="inspector-session-id" data-testid="inspector-session-id">-</span></div>
+                <div><span data-i18n="inspector.runId">Run ID：</span><span id="run-id" data-testid="run-id">-</span></div>
+                <div><span data-i18n="inspector.state">状态：</span><span id="run-state" data-testid="run-state">idle</span></div>
+                <div><span data-i18n="inspector.verification">验收：</span><span id="verification" data-testid="verification">not_run</span></div>
+                <div><span data-i18n="inspector.reasonCode">原因码：</span><span id="reason-code" data-testid="reason-code">-</span></div>
               </div>
               <details class="inspector-meta-details" data-testid="inspector-meta-details">
-                <summary>用量与资源详情</summary>
+                <summary data-i18n="inspector.usageSummary">用量与资源详情</summary>
                 <div id="usage-summary" data-testid="usage-summary" class="notice"></div>
               </details>
             </aside>
@@ -289,10 +289,10 @@
         <section id="page-inbox" data-page="inbox" class="page-view" hidden aria-labelledby="inbox-heading">
           <div class="page-header row between">
             <div>
-              <h1 id="inbox-heading">审批收件箱</h1>
-              <p class="sub">当前项目 · 活动运行（聚合全部会话当前活动运行的待审批提案与扩展调用）</p>
+              <h1 id="inbox-heading" data-i18n="inbox.heading">审批收件箱</h1>
+              <p class="sub" data-i18n="inbox.sub">当前项目 · 活动运行（聚合全部会话当前活动运行的待审批提案与扩展调用）</p>
             </div>
-            <button id="refresh-inbox-btn" data-testid="refresh-inbox" class="small-btn" type="button">刷新待办</button>
+            <button id="refresh-inbox-btn" data-testid="refresh-inbox" class="small-btn" type="button" data-i18n="inbox.refresh">刷新待办</button>
           </div>
           <section class="card">
             <div id="inbox-summary" data-testid="inbox-summary" class="notice"></div>
@@ -304,31 +304,31 @@
         <!-- Page 4: Run History -->
         <section id="page-history" data-page="history" class="page-view" hidden aria-labelledby="history-heading">
           <div class="page-header">
-            <h1 id="history-heading">运行历史</h1>
-            <p class="sub">按所选会话分页加载持久化运行记录；筛选仅作用于当前已加载记录，点击仅只读回看。</p>
+            <h1 id="history-heading" data-i18n="history.heading">运行历史</h1>
+            <p class="sub" data-i18n="history.sub">按所选会话分页加载持久化运行记录；筛选仅作用于当前已加载记录，点击仅只读回看。</p>
           </div>
           <section class="card">
             <div class="row between">
               <div class="row compact-row">
-                <label for="history-session-select">目标会话</label>
+                <label for="history-session-select" data-i18n="history.sessionLabel">目标会话</label>
                 <select id="history-session-select" data-testid="history-session-select"></select>
               </div>
               <div class="row compact-row">
-                <label for="run-history-select">快速切换运行</label>
+                <label for="run-history-select" data-i18n="history.runLabel">快速切换运行</label>
                 <select id="run-history-select" data-testid="run-history-select">
-                  <option value="">（尚无运行记录）</option>
+                  <option value="" data-i18n="history.emptyOption">（尚无运行记录）</option>
                 </select>
                 <span id="run-history-mode" class="muted"></span>
               </div>
             </div>
             <div class="row">
-              <label for="history-filter-input">筛选已加载运行（任务名称 / 状态）</label>
-              <input id="history-filter-input" data-testid="history-filter" type="text" placeholder="输入关键词或终态筛选当前已加载条目" autocomplete="off">
+              <label for="history-filter-input" data-i18n="history.filterLabel">筛选已加载运行（任务名称 / 状态）</label>
+              <input id="history-filter-input" data-testid="history-filter" type="text" placeholder="输入关键词或终态筛选当前已加载条目" data-i18n-placeholder="history.filterPlaceholder" autocomplete="off">
             </div>
-            <div id="history-scope-note" data-testid="history-scope-note" class="notice">仅筛选当前会话已加载的运行记录（无全库搜索接口）。</div>
+            <div id="history-scope-note" data-testid="history-scope-note" class="notice" data-i18n="history.scopeNote">仅筛选当前会话已加载的运行记录（无全库搜索接口）。</div>
             <ul id="session-history" data-testid="session-history" class="list"></ul>
             <div class="row">
-              <button id="history-load-more-btn" data-testid="history-load-more" class="small-btn" type="button" hidden>加载更多历史</button>
+              <button id="history-load-more-btn" data-testid="history-load-more" class="small-btn" type="button" hidden data-i18n="history.loadMore">加载更多历史</button>
             </div>
           </section>
         </section>
@@ -336,21 +336,21 @@
         <!-- Page 5: Extensions -->
         <section id="page-extensions" data-page="extensions" class="page-view" hidden aria-labelledby="extensions-heading">
           <div class="page-header">
-            <h1 id="extensions-heading">扩展能力（Skill 与 MCP）</h1>
-            <p class="sub">仅浏览目录与只读摘要；打开本页不拉起任何进程，MCP 连接与单次工具调用需在运行中逐项审批。</p>
+            <h1 id="extensions-heading" data-i18n="ext.heading">扩展能力（Skill 与 MCP）</h1>
+            <p class="sub" data-i18n="ext.sub">仅浏览目录与只读摘要；打开本页不拉起任何进程，MCP 连接与单次工具调用需在运行中逐项审批。</p>
           </div>
           <div class="tabs">
-            <button id="ext-tab-skill-btn" data-testid="ext-tab-skill" data-ext-tab="skill" class="tab-btn active" type="button">Skill 目录</button>
-            <button id="ext-tab-mcp-btn" data-testid="ext-tab-mcp" data-ext-tab="mcp" class="tab-btn" type="button">MCP 服务器</button>
+            <button id="ext-tab-skill-btn" data-testid="ext-tab-skill" data-ext-tab="skill" class="tab-btn active" type="button" data-i18n="ext.tabSkill">Skill 目录</button>
+            <button id="ext-tab-mcp-btn" data-testid="ext-tab-mcp" data-ext-tab="mcp" class="tab-btn" type="button" data-i18n="ext.tabMcp">MCP 服务器</button>
           </div>
           <section id="ext-panel-skill" class="card">
-            <h2>项目本机 Skill（选入下次启动，切换项目自动清空）</h2>
+            <h2 data-i18n="ext.skillHeading">项目本机 Skill（选入下次启动，切换项目自动清空）</h2>
             <ul id="skill-list" data-testid="skill-list" class="list"></ul>
           </section>
           <section id="ext-panel-mcp" class="card" hidden>
-            <h2>宿主配置 MCP 服务器清单（只读摘要，不等同于已连接）</h2>
+            <h2 data-i18n="ext.mcpHeading">宿主配置 MCP 服务器清单（只读摘要，不等同于已连接）</h2>
             <ul id="mcp-server-list" data-testid="mcp-server-list" class="list"></ul>
-            <h3>当前运行实际 MCP 连接与调用结果</h3>
+            <h3 data-i18n="ext.callsHeading">当前运行实际 MCP 连接与调用结果</h3>
             <div id="extension-result" data-testid="extension-result" class="notice"></div>
             <ul id="extension-call-list" data-testid="extension-call-list" class="list"></ul>
           </section>
@@ -365,185 +365,193 @@
   <path stroke-linecap="round" stroke-linejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"/>
 </svg>
               </span>
-              <input id="settings-search-input" data-testid="settings-search" type="search" placeholder="搜索设置项（外观、桌面托盘、模型、审批、约束、存储）..." aria-label="搜索设置项（快捷键 Ctrl+K）" autocomplete="off">
+              <input id="settings-search-input" data-testid="settings-search" type="search" placeholder="搜索设置项（外观、桌面托盘、模型、审批、约束、存储）..." aria-label="搜索设置项（快捷键 Ctrl+K）" data-i18n-placeholder="settings.searchPlaceholder" data-i18n-aria-label="settings.searchAria" autocomplete="off">
               <span class="settings-kbd-group" aria-hidden="true"><kbd>Ctrl</kbd><kbd>K</kbd></span>
             </div>
             <ul id="settings-search-results" data-testid="settings-search-results" class="list settings-search-results" role="listbox" aria-label="设置搜索匹配结果" hidden></ul>
-            <div id="settings-search-empty" data-testid="settings-search-empty" class="notice settings-search-empty" hidden>未找到匹配的设置项</div>
+            <div id="settings-search-empty" data-testid="settings-search-empty" class="notice settings-search-empty" hidden data-i18n="settings.searchEmpty">未找到匹配的设置项</div>
           </div>
 
           <div class="settings-grid">
-            <nav class="settings-nav" aria-label="设置分类">
+            <nav class="settings-nav" aria-label="设置分类" data-i18n-aria-label="settings.navAria">
               <button class="nav-btn active" data-settings-section="appearance" data-testid="settings-sec-appearance" type="button">
                 <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9.53 16.122a3 3 0 0 0-5.78 1.128 2.25 2.25 0 0 1-2.4 2.245 4.5 4.5 0 0 0 8.4-2.245c0-.399-.078-.78-.22-1.128Zm0 0a15.998 15.998 0 0 0 3.388-1.62m-5.043-.025a15.994 15.994 0 0 1 1.622-3.395m3.42 3.42a15.995 15.995 0 0 0 4.764-4.648l3.876-5.814a1.151 1.151 0 0 0-1.597-1.597L14.146 6.32a15.996 15.996 0 0 0-4.649 4.763m3.42 3.42a6.776 6.776 0 0 0-3.42-3.42"/>
 </svg></span>
-                <span>外观与编辑</span>
+                <span data-i18n="settings.secAppearance">外观与编辑</span>
               </button>
               <button class="nav-btn" data-settings-section="desktop" data-testid="settings-sec-desktop" type="button">
                 <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 0 1-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0 1 15 18.257V17.25m6-12V15a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 15V5.25m18 0A2.25 2.25 0 0 0 18.75 3H5.25A2.25 2.25 0 0 0 3 5.25m18 0V12a2.25 2.25 0 0 1-2.25 2.25H5.25A2.25 2.25 0 0 1 3 12V5.25"/>
 </svg></span>
-                <span>桌面与托盘</span>
+                <span data-i18n="settings.secDesktop">桌面与托盘</span>
               </button>
               <button class="nav-btn" data-settings-section="model" data-testid="settings-sec-model" type="button">
                 <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 3v1.5M4.5 8.25H3m18 0h-1.5M4.5 12H3m18 0h-1.5m-15 3.75H3m18 0h-1.5M8.25 19.5V21M12 3v1.5m0 15V21m3.75-18v1.5m0 15V21m-9-1.5h10.5a2.25 2.25 0 0 0 2.25-2.25V6.75a2.25 2.25 0 0 0-2.25-2.25H6.75A2.25 2.25 0 0 0 4.5 6.75v10.5a2.25 2.25 0 0 0 2.25 2.25Zm.75-12h9v9h-9v-9Z"/>
 </svg></span>
-                <span>模型与连接</span>
+                <span data-i18n="settings.secModel">模型与连接</span>
               </button>
               <button class="nav-btn" data-settings-section="permissions" data-testid="settings-sec-permissions" type="button">
                 <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/>
 </svg></span>
-                <span>审批与命令</span>
+                <span data-i18n="settings.secPermissions">审批与命令</span>
               </button>
               <button class="nav-btn" data-settings-section="constraints" data-testid="settings-sec-constraints" type="button">
                 <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"/>
 </svg></span>
-                <span>会话约束</span>
+                <span data-i18n="settings.secConstraints">会话约束</span>
               </button>
               <button class="nav-btn" data-settings-section="storage" data-testid="settings-sec-storage" type="button">
                 <span class="nav-icon duotone-icon" aria-hidden="true"><svg width="16" height="16" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true" data-slot="icon">
   <path stroke-linecap="round" stroke-linejoin="round" d="M20.25 6.375c0 2.278-3.694 4.125-8.25 4.125S3.75 8.653 3.75 6.375m16.5 0c0-2.278-3.694-4.125-8.25-4.125S3.75 4.097 3.75 6.375m16.5 0v11.25c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125V6.375m16.5 0v3.75m-16.5-3.75v3.75m16.5 0v3.75C20.25 16.153 16.556 18 12 18s-8.25-1.847-8.25-4.125v-3.75m16.5 0c0 2.278-3.694 4.125-8.25 4.125s-8.25-1.847-8.25-4.125"/>
 </svg></span>
-                <span>存储与保留</span>
+                <span data-i18n="settings.secStorage">存储与保留</span>
               </button>
             </nav>
 
             <div class="settings-content">
               <div class="page-header settings-main-head">
-                <h1 id="settings-heading">设置</h1>
+                <h1 id="settings-heading" data-i18n="settings.heading">设置</h1>
               </div>
 
               <div id="settings-overview-grid" data-testid="settings-overview-grid" class="settings-overview-grid">
                 <div class="settings-overview-col">
                   <section id="settings-overview-desktop" data-testid="settings-overview-desktop" class="card settings-overview-card">
-                    <h2>桌面与托盘</h2>
+                    <h2 data-i18n="settings.ovDesktop">桌面与托盘</h2>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">关闭窗口</span>
-                      <span class="settings-ro-val">收起到托盘</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovCloseWin">关闭窗口</span>
+                      <span class="settings-ro-val" data-i18n="settings.ovCloseWinVal">收起到托盘</span>
                     </div>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">托盘操作</span>
-                      <span class="settings-ro-val">打开 / 退出</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovTrayAction">托盘操作</span>
+                      <span class="settings-ro-val" data-i18n="settings.ovTrayActionVal">打开 / 退出</span>
                     </div>
                   </section>
 
                   <section id="settings-overview-diff" data-testid="settings-overview-diff" class="card settings-overview-card">
-                    <h2>Diff 与证据</h2>
+                    <h2 data-i18n="settings.ovDiff">Diff 与证据</h2>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">展示位置</span>
-                      <span class="settings-ro-val">右侧详情抽屉</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovDiffLoc">展示位置</span>
+                      <span class="settings-ro-val" data-i18n="settings.ovDiffLocVal">右侧详情抽屉</span>
                     </div>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">快捷定位</span>
-                      <span class="settings-ro-val">首屏可见</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovQuickJump">快捷定位</span>
+                      <span class="settings-ro-val" data-i18n="settings.ovQuickJumpVal">首屏可见</span>
                     </div>
                   </section>
                 </div>
 
                 <div class="settings-overview-col">
                   <section id="settings-overview-model" data-testid="settings-overview-model" class="card settings-overview-card">
-                    <h2>模型与连接</h2>
+                    <h2 data-i18n="settings.ovModel">模型与连接</h2>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">连接状态</span>
-                      <span id="settings-overview-host-mode" data-testid="settings-overview-host-mode" class="settings-status-pill">正在检查</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovConnState">连接状态</span>
+                      <span id="settings-overview-host-mode" data-testid="settings-overview-host-mode" class="settings-status-pill" data-i18n="host.checking">正在检查</span>
                     </div>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">当前模型</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovCurModel">当前模型</span>
                       <span id="settings-overview-model-val" data-testid="settings-overview-model-val" class="settings-ro-val">-</span>
                     </div>
                   </section>
 
                   <section id="settings-overview-storage" data-testid="settings-overview-storage" class="card settings-overview-card">
-                    <h2>存储与保留</h2>
+                    <h2 data-i18n="settings.ovStorage">存储与保留</h2>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">已用空间</span>
-                      <span id="settings-overview-storage-bytes" data-testid="settings-overview-storage-bytes" class="settings-ro-val">等待会话上下文</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovUsedSpace">已用空间</span>
+                      <span id="settings-overview-storage-bytes" data-testid="settings-overview-storage-bytes" class="settings-ro-val" data-i18n="settings.ovUsedWait">等待会话上下文</span>
                     </div>
                     <div class="settings-kv-row">
-                      <span class="settings-kv-title">保留策略</span>
-                      <span class="settings-ro-val">本地持久保留</span>
+                      <span class="settings-kv-title" data-i18n="settings.ovRetention">保留策略</span>
+                      <span class="settings-ro-val" data-i18n="settings.ovRetentionVal">本地持久保留</span>
                     </div>
                   </section>
                 </div>
               </div>
 
               <section id="settings-panel-appearance" data-settings-panel="appearance" data-testid="settings-panel-appearance" class="card" tabindex="-1">
-                <h2>外观与编辑（偏好保存在本机浏览器）</h2>
+                <h2 data-i18n="settings.appearanceTitle">外观与编辑（偏好保存在本机）</h2>
                 <div class="row">
-                  <label for="theme-select">界面主题</label>
+                  <label for="locale-select" data-i18n="settings.languageLabel">界面语言</label>
+                  <select id="locale-select" data-testid="locale-select">
+                    <option value="zh-CN">简体中文</option>
+                    <option value="en">English</option>
+                  </select>
+                </div>
+                <div class="notice" data-i18n="settings.languageNote">桌面端偏好保存在 Electron 用户配置目录，不写入项目目录或会话数据库；浏览器端保存在同源本地存储。</div>
+                <div class="row">
+                  <label for="theme-select" data-i18n="settings.themeLabel">界面主题</label>
                   <select id="theme-select" data-testid="theme-select">
-                    <option value="light">冰白（light）</option>
-                    <option value="dark">石墨黑（dark）</option>
+                    <option value="light" data-i18n="settings.themeLight">冰白（light）</option>
+                    <option value="dark" data-i18n="settings.themeDark">石墨黑（dark）</option>
                   </select>
                 </div>
                 <div class="row">
-                  <label for="density-select">信息密度</label>
+                  <label for="density-select" data-i18n="settings.densityLabel">信息密度</label>
                   <select id="density-select" data-testid="density-select">
-                    <option value="normal">标准（normal）</option>
-                    <option value="compact">紧凑（compact）</option>
+                    <option value="normal" data-i18n="settings.densityNormal">标准（normal）</option>
+                    <option value="compact" data-i18n="settings.densityCompact">紧凑（compact）</option>
                   </select>
                 </div>
-                <div id="appearance-diff-note" data-testid="appearance-diff-note" class="notice">
-                  <strong>Diff 展示与证据抽屉说明</strong>：运行文件差异（Run Diff）、工作区只读文件与本机 Git 差异（暂存区 / 工作树）均通过会话工作台右侧「运行详情」证据抽屉展示，可直接在运行卡点击「查看 Diff」或顶部「展开详情」打开，并支持将选定差异块带入只读对话。
+                <div id="appearance-diff-note" data-testid="appearance-diff-note" class="notice" data-i18n="settings.diffNote">
+                  运行文件差异（Run Diff）、工作区只读文件与本机 Git 差异（暂存区 / 工作树）均通过会话工作台右侧「运行详情」证据抽屉展示，可直接在运行卡点击「查看 Diff」或顶部「展开详情」打开，并支持将选定差异块带入只读对话。
                 </div>
               </section>
 
               <section id="settings-panel-desktop" data-settings-panel="desktop" data-testid="settings-panel-desktop" class="card" hidden tabindex="-1">
-                <h2>桌面与托盘（Windows 桌面外壳只读说明）</h2>
-                <div id="desktop-tray-note" data-testid="desktop-tray-note" class="notice">
+                <h2 data-i18n="settings.desktopTitle">桌面与托盘（Windows 桌面外壳只读说明）</h2>
+                <div id="desktop-tray-note" data-testid="desktop-tray-note" class="notice" data-i18n="settings.desktopNote">
                   当前桌面外壳由 Electron 本地宿主驱动，窗口关闭与系统托盘策略为固定受控行为（只读展示，无前端可写开关）。
                 </div>
                 <ul class="boundary-list">
-                  <li><strong>关窗收起至系统托盘</strong>：点击主窗口右上角关闭按钮时，窗口隐藏并收起至 Windows 系统托盘，后台本地 Python 宿主与活动运行继续保持连接，不会中断正在执行的任务。</li>
-                  <li><strong>通过托盘恢复或退出</strong>：点击系统托盘图标或托盘菜单「打开 ForeContract」可恢复当前主窗口与同一会话；完全退出应用须通过系统托盘菜单「退出 ForeContract」（若有活动运行将先提示确认）。</li>
-                  <li><strong>单实例与同源边界</strong>：同一数据根保持单实例锁；桌面渲染进程仅允许访问本次宿主绑定的 <code>127.0.0.1</code> loopback 源。</li>
+                  <li data-i18n="settings.desktopLi1">关窗收起至系统托盘：点击主窗口右上角关闭按钮时，窗口隐藏并收起至 Windows 系统托盘，后台本地 Python 宿主与活动运行继续保持连接，不会中断正在执行的任务。</li>
+                  <li data-i18n="settings.desktopLi2">通过托盘恢复或退出：点击系统托盘图标或托盘菜单「打开 ForeContract」可恢复当前主窗口与同一会话；完全退出应用须通过系统托盘菜单「退出 ForeContract」（若有活动运行将先提示确认）。</li>
+                  <li data-i18n="settings.desktopLi3">单实例与同源边界：同一数据根保持单实例锁；桌面渲染进程仅允许访问本次宿主绑定的 127.0.0.1 loopback 源。</li>
                 </ul>
               </section>
 
               <section id="settings-panel-model" data-settings-panel="model" data-testid="settings-panel-model" class="card" hidden tabindex="-1">
-                <h2>模型与连接（只读宿主状态）</h2>
-                <div id="model-boundary-note" data-testid="model-boundary-note" class="notice">
-                  状态来源：本机宿主启动配置与 <code>/api/v1/health</code> 实时读回；API 凭据仅由宿主进程持有，不进入前端页面或浏览器偏好存储，创建会话后历史会话绑定模型保持不变。
+                <h2 data-i18n="settings.modelTitle">模型与连接（只读宿主状态）</h2>
+                <div id="model-boundary-note" data-testid="model-boundary-note" class="notice" data-i18n="settings.modelNote">
+                  状态来源：本机宿主启动配置与 /api/v1/health 实时读回；API 凭据仅由宿主进程持有，不进入前端页面或浏览器偏好存储，创建会话后历史会话绑定模型保持不变。
                 </div>
                 <div id="settings-host-health" data-testid="settings-host-health" class="notice"></div>
               </section>
 
               <section id="settings-panel-permissions" data-settings-panel="permissions" data-testid="settings-panel-permissions" class="card" hidden tabindex="-1">
-                <h2>审批与命令（真实授权边界）</h2>
+                <h2 data-i18n="settings.permissionsTitle">审批与命令（真实授权边界）</h2>
                 <ul class="boundary-list">
-                  <li><strong>目录范围</strong>：受控项目与本机已有项目严格隔离；已有项目从只读起步，写入须先批准精确路径与操作。</li>
-                  <li><strong>逐提案审批</strong>：修改范围、验证计划、本机命令及 MCP 连接/调用分别独立审批，待审批项内联展示在会话工作台与审批收件箱。</li>
-                  <li><strong>受信任本机执行</strong>：命令批准时须显式勾选 <code>trusted_local_execution</code> 表示受信任本机执行，而非 OS 沙箱隔离。</li>
+                  <li data-i18n="settings.permissionsLi1">目录范围：受控项目与本机已有项目严格隔离；已有项目从只读起步，写入须先批准精确路径与操作。</li>
+                  <li data-i18n="settings.permissionsLi2">逐提案审批：修改范围、验证计划、本机命令及 MCP 连接/调用分别独立审批，待审批项内联展示在会话工作台与审批收件箱。</li>
+                  <li data-i18n="settings.permissionsLi3">受信任本机执行：命令批准时须显式勾选 trusted_local_execution 表示受信任本机执行，而非 OS 沙箱隔离。</li>
                 </ul>
               </section>
 
               <section id="settings-panel-constraints" data-settings-panel="constraints" data-testid="settings-panel-constraints" class="card" hidden tabindex="-1">
-                <h2>会话约束（按当前会话持久化）</h2>
+                <h2 data-i18n="settings.constraintsTitle">会话约束（按当前会话持久化）</h2>
                 <div class="row between">
-                  <span>当前约束修订：<strong id="context-revision" data-testid="context-revision">rev=0 history_cursor=0</strong></span>
-                  <span id="draft-status" data-testid="draft-status" class="notice inline-notice">无未保存草稿（草稿未保存，刷新会丢失）</span>
+                  <span><strong id="context-revision" data-testid="context-revision">rev=0 history_cursor=0</strong></span>
+                  <span id="draft-status" data-testid="draft-status" class="notice inline-notice" data-i18n="settings.draftClean">无未保存草稿（草稿未保存，刷新会丢失）</span>
                 </div>
                 <div class="row column">
-                  <label for="constraints-input">固定约束（UTF-8 &lt;= 8192 字节，每次当前会话只读问答与项目运行原样携带）</label>
-                  <textarea id="constraints-input" data-testid="constraints-input" rows="3" placeholder="例如：禁止修改 tests/，仅在 src/ 修复并报告实际检查输出"></textarea>
+                  <label for="constraints-input" data-i18n="settings.constraintsLabel">固定约束（UTF-8 <= 8192 字节，每次当前会话只读问答与项目运行原样携带）</label>
+                  <textarea id="constraints-input" data-testid="constraints-input" rows="3" placeholder="例如：禁止修改 tests/，仅在 src/ 修复并报告实际检查输出" data-i18n-placeholder="settings.constraintsPlaceholder"></textarea>
                 </div>
                 <div class="row">
-                  <button id="save-constraints-btn" data-testid="save-constraints" type="button" class="primary-btn">保存固定约束</button>
+                  <button id="save-constraints-btn" data-testid="save-constraints" type="button" class="primary-btn" data-i18n="settings.saveConstraints">保存固定约束</button>
                 </div>
                 <div id="context-summary" data-testid="context-summary" class="notice"></div>
                 <div id="session-notice" data-testid="session-notice" class="notice" aria-live="polite"></div>
               </section>
 
               <section id="settings-panel-storage" data-settings-panel="storage" data-testid="settings-panel-storage" class="card" hidden tabindex="-1">
-                <h2>存储与保留（SQLite 只读展示）</h2>
+                <h2 data-i18n="settings.storageTitle">存储与保留（SQLite 只读展示）</h2>
                 <div id="storage-quota" data-testid="storage-quota" class="notice"></div>
                 <ul class="boundary-list">
-                  <li><strong>真实用量</strong>：数据来源于当前会话 <code>/api/v1/sessions/{sid}/context</code> 的 <code>storage_used_bytes</code>（SQLite <code>sessions.sqlite3</code> 实际字节数），仅作只读展示。</li>
-                  <li><strong>数据保留策略</strong>：用户项目与会话持久数据保存在本机 SQLite，与开发验收临时目录严格分离，前端不提供后台静默回收操作。</li>
+                  <li data-i18n="settings.storageLi1">真实用量：数据来源于当前会话 /api/v1/sessions/{sid}/context 的 storage_used_bytes（SQLite sessions.sqlite3 实际字节数），仅作只读展示。</li>
+                  <li data-i18n="settings.storageLi2">数据保留策略：用户项目与会话持久数据保存在本机 SQLite，与开发验收临时目录严格分离，前端不提供后台静默回收操作。</li>
                 </ul>
               </section>
             </div>
