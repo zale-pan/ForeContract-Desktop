@@ -1,0 +1,9 @@
+{
+  "framework": "ForeContract",
+  "commit": "96cac339c9dd578e9c84987e2cb1e42a581eab93",
+  "packages": [
+    "forecontract-core",
+    "forecontract-llm",
+    "forecontract-coding"
+  ]
+}
