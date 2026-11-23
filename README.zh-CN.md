@@ -1,8 +1,30 @@
-# ForeContract 桌面客户端
+# ForeContract Desktop
 
 [English](README.md)
 
-Windows Electron 客户端与本地 Python 宿主提供会话、审批、运行历史和证据查看。下面从空目录启动离线工作区。准备 Windows x64、PowerShell、Git 和 Python 3.12，安装依赖时需要联网。两个源码仓库分别命名为 ForeContract 和 ForeContract-Desktop，放在同一父目录下。从桌面仓库根目录开始，在同一 PowerShell 窗口依次运行两段命令。框架仓库需要包含 framework.lock.json 指定的提交；安装会直接从该提交导出源码，工作区中尚未提交的修改不会进入安装。
+“先帮我看看为什么算错，别急着改。”
+
+这是我希望一次编程会话可以开始的方式。项目里有个加法函数，传入 2 和 3，却得到 -1。此时你可能只是想听一个解释：它读到了哪一行？现有测试覆盖了什么？等你确定值得改，再接着说：“那就把它修好，跑个测试看看。”刚才读过的文件、说过的话，都属于同一个问题，你可以留在原来的会话里。
+
+ForeContract Desktop 是这样一个 Windows 编程助手。讨论转入实际修改时，工作台会让你看到模型打算动哪些文件，以及准备怎样验证。写入范围和验证计划获批后，它才可以编辑；本机真正要运行的命令还会交给你单独确认。审批的用意很具体：你也许同意改一行加法，却想先看一眼那条要在自己电脑上执行的命令。
+
+**我最希望这个界面保留下来的，是一次没有完全成功的工作。** 假如那一行已经改对了，测试却因为路径写错而失败，你可以打开这次运行的 Diff，看减号有没有变成加号，也可以打开命令结果，看测试到底跑到了哪里。这两个事实都值得保留。过一会儿回到项目，原先的修改和失败记录还在同一次运行下面，你不用靠记忆猜它做到哪了。模型对话需要配置在线模型，生成的计划也仍需要人判断，尤其值得看的是它选的测试能否真的覆盖这次修改。
+
+### 为什么桌面应用和框架分开放？
+
+在桌面上，最重要的是能把一个问题谈清楚，在需要时放心地让助手动手。往下一层，才是另一个有意思的问题：模型怎样在动手前说清预期，运行时又怎样判断实际效果？我把后者放在独立的 Python 框架里。对这个设计或它的局限感兴趣，可以读那边关于 **OFCEVR Loop** 的介绍。[ForeContract 框架](https://github.com/zale-pan/ForeContract/blob/main/README.zh-CN.md)
+
+### 在 Windows 上试用
+
+**Windows x64 安装包仍在验收。** MSI 已内置 Electron、Python 和所需的 Git 工具，目标是双击安装后从开始菜单打开。在开发机上已验证安装、启动和托盘退出。重开读回会话、卸载保留数据，以及无开发环境的 Windows 实测仍待完成，当前尚无正式下载版本。
+
+工作台界面目前是中文。关窗口会收起到通知区域，正在运行的宿主可以继续工作；从托盘打开可以回到窗口。需要完全退出时，右键图标选“退出 ForeContract”。活动任务的取消清理恰好与宿主关停重叠，仍是本地试用的已知限制。
+
+下面的源码说明留给想自己运行或参与开发的人。按此方式打开的是离线工作台，可以浏览项目、会话和历史；开头的模型问答需要另行配置在线模式。
+
+## 从源码启动（贡献者）
+
+准备 Windows x64、PowerShell、Git 和 Python 3.12，安装依赖时需要联网。两个源码仓库分别命名为 ForeContract 和 ForeContract-Desktop，放在同一父目录下。从桌面仓库根目录开始，在同一 PowerShell 窗口依次运行两段命令。框架仓库需要包含 framework.lock.json 指定的提交；安装会直接从该提交导出源码，工作区中尚未提交的修改不会进入安装。
 
 ```powershell
 $desktop = (Resolve-Path .).Path
@@ -35,7 +57,6 @@ $env:PYTHONPATH = "$desktop\apps\local"
 & "$run\electron\electron.exe" "$desktop\apps\desktop"
 ```
 
-点窗口 × 会收起到托盘，点击托盘图标可以恢复。右键图标选择 **退出 ForeContract**，客户端与宿主都会退出。再次使用同一工作区时，沿用相同的数据根并重新执行启动命令。界面文字目前为中文，离线体验无需模型密钥。取消清理与宿主关停重叠仍为已知限制，真实模型自主提出计划的可靠性仍在探索。
 
 ## 恢复中断的 Electron 下载
 
@@ -48,5 +69,13 @@ Expand-Archive -LiteralPath $zip -DestinationPath "$run\electron" -ErrorAction S
 ```
 
 解压成功后，从启动代码块的 `$env:FC_DESKTOP_ROOT = ...` 那一行继续，执行全部余下命令。若摘要不匹配，请先重新获取完整压缩包。
+
+## 作者的话
+
+我把这个桌面应用做出来，是想亲手用一用自己写的框架，看看它放进日常编程里到底顺不顺手。现在想把它开源，也想听听别人用起来是什么感觉。
+
+做这个项目的过程，也是我学前端、后端和桌面开发的过程，很多地方还很生疏。如果哪一步让你犹豫了，或者你觉得“这里换个做法会舒服很多”，欢迎告诉我。 你可以在 [Issues](https://github.com/zale-pan/ForeContract-Desktop/issues) 留言，也可以直接写信给我。
+
+Zale Pan · <hashuuki@gmail.com>
 
 Copyright 2026 Zale Pan · Apache-2.0. [LICENSE](LICENSE) · [Third-party notices / 第三方声明](THIRD_PARTY_NOTICES.md).
